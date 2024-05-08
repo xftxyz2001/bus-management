@@ -13,4 +13,5 @@ public interface MessageService {
 
     List<Message> getAllMessages();
 
+    List<Message> getReply(Integer username);
 }

@@ -28,4 +28,9 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getAllMessages() {
         return messageMapper.getAllMessages();
     }
+
+    @Override
+    public List<Message> getReply(Integer username) {
+        return messageMapper.getReply(username);
+    }
 }

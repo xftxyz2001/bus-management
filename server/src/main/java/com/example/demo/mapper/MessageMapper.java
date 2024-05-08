@@ -19,4 +19,7 @@ public interface MessageMapper {
 
     @Select("select * from messages")
     List<Message> getAllMessages();
+
+    @Select("select * from messages where reply = #{id}")
+    List<Message> getReply(Integer id);
 }
