@@ -10,9 +10,13 @@
       <el-col :span="4">
         <el-button @click="resetSearch" type="info" style="margin: 0 20px 0 -150px">重置</el-button>
       </el-col>
+
+      <el-col :span="8">
+        <el-button @click="handleAdd" type="primary">添加司机</el-button>
+      </el-col>
     </el-row>
 
-    <el-table :data="newDriver" style="width: 100%">
+    <el-table :data="drivers" style="width: 100%">
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="gender" label="性别"></el-table-column>
@@ -21,143 +25,160 @@
       <el-table-column prop="workLocation" label="工作区间"></el-table-column>
       <el-table-column label="操作">
         <template #default="{ row }">
+          <el-button size="mini" type="primary" @click="handleEdit(row)">修改</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-row style="margin-top: 20px">
-      <el-col :span="8">
-        <el-input v-model="newDriver.name" placeholder="姓名"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input v-model="newDriver.age" placeholder="年龄"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input v-model="newDriver.gender" placeholder="性别"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input v-model="newDriver.licenseNumber" placeholder="驾驶证号"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input v-model="newDriver.phone" placeholder="电话号码"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input v-model="newDriver.worklocation" placeholder="工作区间"></el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-button @click="addDriver" type="primary">添加司机</el-button>
-      </el-col>
-    </el-row>
-    <!-- <el-row style="margin-top: 20px;">
-        <el-col :span="8">
-          <el-input v-model="newDriver.name" placeholder="姓名"></el-input>
-        </el-col>
-    </el-row> -->
   </div>
+
+  <!-- 新增/编辑弹窗 -->
+  <el-dialog v-model="dialogVisible" :title="dialogTitle">
+    <el-form :model="newDriver" label-width="80px">
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="newDriver.name" />
+      </el-form-item>
+      <el-form-item label="年龄" prop="age">
+        <el-input v-model="newDriver.age" />
+      </el-form-item>
+      <el-form-item label="性别" prop="gender">
+        <el-radio-group v-model="newDriver.gender">
+          <el-radio label="男">男</el-radio>
+          <el-radio label="女">女</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="驾驶证号" prop="licenseNumber">
+        <el-input v-model="newDriver.licenseNumber" />
+      </el-form-item>
+      <el-form-item label="电话号码" prop="phone">
+        <el-input v-model="newDriver.phone" />
+      </el-form-item>
+      <el-form-item label="工作区间" prop="workLocation">
+        <el-input v-model="newDriver.workLocation" />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="addOrUpdateDriver">确定</el-button>
+    </div>
+  </el-dialog>
 </template>
 
-<script>
-import { reactive, ref, onMounted } from "vue";
-import axios from "axios";
+<script setup>
+import { ref, onMounted } from "vue";
+import request from "@/utils/request.js";
 
-export default {
-  //  setup() {
-  //   const state = ref({
-  //     drivers: [],
-  //     searchQuery: '',
-  //     newDriver: {
-  //       name: '',
-  //       age: '',
-  //       gender: '',
-  //       licenseNumber: '',
-  //       phone:'',
-  //       worklocation:''
-  //     },
-  //   });
-  setup() {
-    const newDriver = ref([]);
+const searchQuery = ref("");
+const drivers = ref([]);
 
-    // const newDriver= ref({
-    //     name: '',
-    //   age: '',
-    //   gender: '',
-    //   licenseNumber: '',
-    //   phone:'',
-    //   worklocation:''
-    // });
-
-    // 在组件加载时获取司机数据
-    onMounted(async () => {
-      await fetchDrivers();
+// 获取司机数据
+function fetchDrivers() {
+  request
+    .get("/driver/getAllDrivers")
+    .then(res => {
+      drivers.value = res.data;
+    })
+    .catch(err => {
+      console.error("Failed to fetch drivers:", err);
     });
+}
+fetchDrivers();
 
-    axios.defaults.baseURL = "http://localhost:8080";
-    // 获取司机数据
-    const fetchDrivers = async () => {
-      try {
-        const response = await axios.get("/driver/getAllDrivers"); // 假设后端API路径为/api/drivers
-        newDriver.value = response.data.data;
-        console.log(newDriver);
-      } catch (error) {
-        console.error("Failed to fetch drivers:", error);
-      }
-    };
+// 搜索司机
+function searchDrivers() {
+  request
+    .get(`/driver/getByDriverName?driverName=${searchQuery.value}`)
+    .then(res => {
+      drivers.value = res.data;
+    })
+    .catch(err => {
+      console.error("Failed to search drivers:", err);
+    });
+}
 
-    // 搜索司机
-    const searchDrivers = async () => {
-      try {
-        const response = await axios.get(`/driver/id?search=${state.searchQuery}`);
-        state.drivers = response.data.data;
-      } catch (error) {
-        console.error("Failed to search drivers:", error);
-      }
-    };
+// 重置搜索
+function resetSearch() {
+  searchQuery.value = "";
+  fetchDrivers();
+}
 
-    // 重置搜索
-    const resetSearch = () => {
-      state.searchQuery = "";
+// 删除司机
+function handleDelete(driver) {
+  request
+    .delete(`/driver/${driver.driverID}`)
+    .then(() => {
       fetchDrivers();
-    };
+    })
+    .catch(err => {
+      console.error("Failed to delete driver:", err);
+    });
+}
 
-    // 删除司机
-    const handleDelete = async driver => {
-      try {
-        await axios.delete(`/driver/id/${driver.id}`);
-        await fetchDrivers();
-      } catch (error) {
-        console.error("Failed to delete driver:", error);
-      }
-    };
+// 添加司机
+function addDriver() {
+  request
+    .post("/driver/addDriver", newDriver.value)
+    .then(() => {
+      fetchDrivers();
+    })
+    .catch(err => {
+      console.error("Failed to add driver:", err);
+    });
+}
 
-    // 添加司机
-    const addDriver = async () => {
-      try {
-        await axios.post("/driver/add", state.newDriver);
-        state.newDriver = {
-          name: "",
-          age: "",
-          gender: "",
-          licenseNumber: "",
-          phone: "",
-          worklocation: ""
-        };
-        await fetchDrivers();
-      } catch (error) {
-        console.error("Failed to add driver:", error);
-      }
-    };
+// 更新司机
+function updateDriver() {
+  request
+    .put("/driver/update", newDriver.value)
+    .then(() => {
+      fetchDrivers();
+    })
+    .catch(err => {
+      console.error("Failed to update driver:", err);
+    });
+}
 
-    return {
-      // state,
-      newDriver,
-      searchDrivers,
-      resetSearch,
-      handleDelete,
-      addDriver
-    };
+const dialogVisible = ref(false);
+const dialogTitle = ref("");
+const newDriver = ref({
+  driverID: "",
+  name: "",
+  age: "",
+  gender: "",
+  licenseNumber: "",
+  phone: "",
+  workLocation: ""
+});
+
+function handleAdd() {
+  dialogVisible.value = true;
+  dialogTitle.value = "添加司机";
+  newDriver.value = {
+    driverID: "",
+    name: "",
+    age: "",
+    gender: "",
+    licenseNumber: "",
+    phone: "",
+    workLocation: ""
+  };
+}
+
+function handleEdit(driver) {
+  dialogVisible.value = true;
+  dialogTitle.value = "编辑司机";
+  newDriver.value = { ...driver };
+}
+
+// 添加或编辑司机
+function addOrUpdateDriver() {
+  if (dialogTitle.value === "添加司机") {
+    addDriver();
+  } else {
+    updateDriver();
   }
-};
+  dialogVisible.value = false;
+}
 </script>
 
 <style>

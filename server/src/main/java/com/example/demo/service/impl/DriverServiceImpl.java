@@ -29,12 +29,17 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public void updateDriver(int id, Driver driver) {
-        driverMapper.updateDriver(id, driver);
+    public void updateDriver(Driver driver) {
+        driverMapper.updateDriver(driver);
     }
 
     @Override
     public void deleteDriver(int id) {
         driverMapper.deleteDriver(id);
+    }
+
+    @Override
+    public List<Driver> getByDriverName(String driverName) {
+        return driverMapper.getByDriverName(driverName);
     }
 }

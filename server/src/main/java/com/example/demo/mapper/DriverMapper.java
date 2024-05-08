@@ -17,9 +17,12 @@ public interface DriverMapper {
     @Select("select * from driver where DriverID = #{id}")
     Driver getDriverById(int id);
 
-    @Update("update driver set (Name, Age, Gender, LicenseNumber, Phone, WorkLocation) = (#{name},#{age},#{gender},#{licenseNumber},#{phone},#{workLocation}) where DriverID = #{id}")
-    void updateDriver(int id, Driver driver);
+    @Update("update driver set Name = #{name}, Age = #{age}, Gender = #{gender}, LicenseNumber = #{licenseNumber}, Phone = #{phone}, WorkLocation = #{workLocation} where DriverID = #{driverID}")
+    void updateDriver(Driver driver);
 
     @Delete("delete from driver where DriverID = #{id}")
     void deleteDriver(int id);
+
+    @Select("select * from driver where Name = #{driverName}")
+    List<Driver> getByDriverName(String driverName);
 }

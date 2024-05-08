@@ -12,7 +12,9 @@ public interface DriverService {
 
     Driver getDriverById(int id);
 
-    void updateDriver(int id, Driver driver);
+    void updateDriver(Driver driver);
 
     void deleteDriver(int id);
+
+    List<Driver> getByDriverName(String driverName);
 }

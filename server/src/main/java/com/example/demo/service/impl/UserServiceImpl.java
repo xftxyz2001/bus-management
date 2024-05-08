@@ -58,8 +58,6 @@ public class UserServiceImpl implements UserService {
         Integer id = (Integer) map.get("id");
         //自己改动过，将newPwd加密了
         userMapper.updatePwd(Md5Util.getMD5String(newPwd), id);
-
-
     }
 
     @Override
