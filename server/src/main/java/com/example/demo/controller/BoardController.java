@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.pojo.Board;
 import com.example.demo.pojo.Result;
-import com.example.demo.pojo.board;
-import com.example.demo.service.boardService;
+import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,18 +13,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/board")
 @Validated
-public class boardController {
+public class BoardController {
     @Autowired
-    private boardService boardService;
+    private BoardService boardService;
 
     @GetMapping("/getAllboard")
     public Result getAllBoard() {
-        List<board> all = boardService.getAll();
+        List<Board> all = boardService.getAll();
         return Result.success(all);
     }
 
     @PostMapping("/declare")
-    public Result declare(@RequestBody board message) {
+    public Result declare(@RequestBody Board message) {
         boardService.add(message);
 //        System.out.println(message.getTitle());
         return Result.success("success");
@@ -37,14 +37,14 @@ public class boardController {
     }
 
     @PostMapping("/revise")
-    public Result revise(@RequestBody board message) {
+    public Result revise(@RequestBody Board message) {
         boardService.revise(message);
         return Result.success("success");
     }
 
     @GetMapping("/search")
-    public Result<List<board>> searchNotice(@RequestParam String keyword) {
-        List<board> notices = boardService.searchNotices(keyword);
+    public Result<List<Board>> searchNotice(@RequestParam String keyword) {
+        List<Board> notices = boardService.searchNotices(keyword);
         return Result.success(notices);
     }
 

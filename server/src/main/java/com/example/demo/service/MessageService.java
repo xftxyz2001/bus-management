@@ -1,16 +1,16 @@
 package com.example.demo.service;
 
-import com.example.demo.pojo.message;
+import com.example.demo.pojo.Message;
 
 import java.util.List;
 
-public interface messageService {
+public interface MessageService {
 
 
-    void add(message book);
+    void add(Message book);
 
     void deleteMessage(int id);
 
-    List<message> getAllMessages();
+    List<Message> getAllMessages();
 
 }

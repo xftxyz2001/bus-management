@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class message {
+public class Message {
     private Integer id;
     private String addtime;
     private Integer userid;
     private String username;
     //留言内容
     private String content;
-    //回复内容
-    private String reply;
+    //父留言id
+    private Integer reply;
 }

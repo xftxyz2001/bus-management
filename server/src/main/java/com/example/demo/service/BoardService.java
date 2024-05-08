@@ -1,17 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.pojo.board;
+import com.example.demo.pojo.Board;
 
 import java.util.List;
 
-public interface boardService {
-    List<board> getAll();
+public interface BoardService {
+    List<Board> getAll();
 
-    void add(board message);
+    void add(Board message);
 
     void deleteBoard(Integer id);
 
-    void revise(board message);
+    void revise(Board message);
 
-    List<board> searchNotices(String keyword);
+    List<Board> searchNotices(String keyword);
 }

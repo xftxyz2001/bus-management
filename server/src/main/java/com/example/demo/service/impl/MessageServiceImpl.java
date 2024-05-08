@@ -1,21 +1,21 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.mapper.messageMapper;
-import com.example.demo.pojo.message;
-import com.example.demo.service.messageService;
+import com.example.demo.mapper.MessageMapper;
+import com.example.demo.pojo.Message;
+import com.example.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class messageServiceImpl implements messageService {
+public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    private messageMapper messageMapper;
+    private MessageMapper messageMapper;
 
     @Override
-    public void add(message book) {
+    public void add(Message book) {
         messageMapper.add(book.getUsername(), book.getContent(), book.getUserid());
     }
 
@@ -25,7 +25,7 @@ public class messageServiceImpl implements messageService {
     }
 
     @Override
-    public List<message> getAllMessages() {
+    public List<Message> getAllMessages() {
         return messageMapper.getAllMessages();
     }
 }

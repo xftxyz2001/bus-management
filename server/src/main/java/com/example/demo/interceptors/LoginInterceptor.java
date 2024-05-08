@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class busLine {
+public class BusLine {
     @NotNull
     private Integer id;
     private String city;

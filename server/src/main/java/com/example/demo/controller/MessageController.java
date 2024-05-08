@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.pojo.Message;
 import com.example.demo.pojo.Result;
 import com.example.demo.pojo.User;
-import com.example.demo.pojo.message;
+import com.example.demo.service.MessageService;
 import com.example.demo.service.UserService;
-import com.example.demo.service.messageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +14,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/message")
 @Validated
-public class messageController {
+public class MessageController {
     @Autowired
-    private messageService messageService;
+    private MessageService messageService;
 
     @Autowired
     private UserService userServicel;
-    //添加留言
 
+    // 添加留言
     @PostMapping("/sayliuyan")
-    public Result addcontext(message book) {
+    public Result addcontext(Message book) {
         User u = userServicel.findByUserName(book.getUsername());
         if (u == null) {
             return Result.error("该用户名不存在，请重新输入");
@@ -31,23 +31,19 @@ public class messageController {
             messageService.add(book);
             return Result.success();
         }
-
     }
 
     @DeleteMapping("/delete/{id}")
     public Result deleteMessage(@PathVariable int id) {
         messageService.deleteMessage(id);
         return Result.success("删除成功");
-
     }
 
-    //显示所有留言
+    // 显示所有留言
     @GetMapping("/getAll")
     public Result getAllMessages() {
-
-        List<message> messages = messageService.getAllMessages();
+        List<Message> messages = messageService.getAllMessages();
         return Result.success(messages);
-
     }
 }
 

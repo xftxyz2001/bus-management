@@ -1,19 +1,19 @@
 package com.example.demo.service;
 
-import com.example.demo.pojo.busLine;
+import com.example.demo.pojo.BusLine;
 
 import java.util.List;
 
-public interface busLineService {
-    void add(busLine bus);
+public interface BusLineService {
+    void add(BusLine bus);
 
-    busLine findBybusid(String busid);
+    BusLine findBybusid(String busid);
 
-    void registerbus(busLine bus);
+    void registerbus(BusLine bus);
 
-    List<busLine> getAll();
+    List<BusLine> getAll();
 
-    void update(busLine bus);
+    void update(BusLine bus);
 
     void delete(String id);
 }

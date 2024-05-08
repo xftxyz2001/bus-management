@@ -37,9 +37,11 @@
       </div>
       <!-- 分割线 -->
       <el-divider></el-divider>
-      <el-button type="danger" @click="logout" style="float: right;margin-right: -20px;margin-top: -10px;">退出登录</el-button>
+      <el-button type="danger" @click="logout" style="float: right; margin-right: -20px; margin-top: -10px">
+        退出登录
+      </el-button>
     </el-card>
-    
+
     <!-- <div>
       <el-button type="danger" @click="logout" style="float: right;">退出登录</el-button>
     </div> -->

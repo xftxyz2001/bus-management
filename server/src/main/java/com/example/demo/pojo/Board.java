@@ -9,7 +9,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class board {
+public class Board {
     private Integer id;
     private String title;
     private String content;

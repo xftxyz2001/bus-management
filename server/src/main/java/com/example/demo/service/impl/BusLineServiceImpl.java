@@ -1,40 +1,40 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.mapper.busLineMapper;
-import com.example.demo.pojo.busLine;
-import com.example.demo.service.busLineService;
+import com.example.demo.mapper.BusLineMapper;
+import com.example.demo.pojo.BusLine;
+import com.example.demo.service.BusLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class busLineServiceImpl implements busLineService {
+public class BusLineServiceImpl implements BusLineService {
     @Autowired
-    private busLineMapper busLineMapper;
+    private BusLineMapper busLineMapper;
 
     @Override
-    public void add(busLine bus) {
+    public void add(BusLine bus) {
         busLineMapper.tianjia(bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
     }
 
     @Override
-    public busLine findBybusid(String busid) {
+    public BusLine findBybusid(String busid) {
         return busLineMapper.findBybusid(busid);
     }
 
     @Override
-    public void registerbus(busLine bus) {
+    public void registerbus(BusLine bus) {
         busLineMapper.zengjia(bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
     }
 
     @Override
-    public List<busLine> getAll() {
+    public List<BusLine> getAll() {
         return busLineMapper.getAll();
     }
 
     @Override
-    public void update(busLine bus) {
+    public void update(BusLine bus) {
         busLineMapper.update(bus.getId(), bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
     }
 
