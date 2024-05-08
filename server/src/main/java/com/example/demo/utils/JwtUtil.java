@@ -11,6 +11,9 @@ public class JwtUtil {
 
     private static final String KEY = "software";
 
+    public static final String KEY_USER_ID = "id";
+    public static final String KEY_USER_NAME = "username";
+
     //接收业务数据,生成token并返回
     public static String genToken(Map<String, Object> claims) {
 //        return JWT.create()

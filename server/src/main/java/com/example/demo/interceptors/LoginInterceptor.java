@@ -1,104 +1,52 @@
 package com.example.demo.interceptors;
-//package com.example.demo.interceptors;
-//
-//
-//import com.example.demo.pojo.Result;
-//import com.example.demo.utils.JwtUtil;
-//import com.example.demo.utils.ThreadLocalUtil;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.redis.core.StringRedisTemplate;
-//import org.springframework.data.redis.core.ValueOperations;
-//import org.springframework.stereotype.Component;
-//import org.springframework.web.servlet.HandlerInterceptor;
-//
-//import java.util.Map;
-//
-//@Component
-//public class LoginInterceptor implements HandlerInterceptor {
-//    @Autowired
-//    private StringRedisTemplate stringRedisTemplate;
-//    @Override
-//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        //令牌验证
-//        String token = request.getHeader("Authorization");
-//        //验证token
-//        try {
-//            //从redis中获取相同的token
-//            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-//            String redisToken = operations.get(token);
-//            if (redisToken==null){
-//                //token已经失效了
-//                throw new RuntimeException();
-//            }
-//            Map<String, Object> claims = JwtUtil.parseToken(token);
-//
-//            //把业务数据存储到ThreadLocal中
-//            ThreadLocalUtil.set(claims);
-//            //放行
-//            return true;
-//        } catch (Exception e) {
-//            //http响应状态码为401
-//            response.setStatus(401);
-//            //不放行
-//            return false;
-//        }
-//    }
-//
-//    @Override
-//    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-//        //清空ThreadLocal中的数据
-//        ThreadLocalUtil.remove();
-//    }
-//}
-//
 
+
+import com.example.demo.config.Env;
+import com.example.demo.pojo.Result;
 import com.example.demo.utils.JwtUtil;
-import com.example.demo.utils.ThreadLocalUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Component
-
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("Authorization");
-
-        try {
-
-            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-            String redisToken = operations.get(token);
-            if (redisToken == null) {
-                //token已经失效了
-                throw new RuntimeException();
-            }
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (isValidToken(token)) {
             Map<String, Object> claims = JwtUtil.parseToken(token);
-
-            ThreadLocalUtil.set(claims);
+            request.setAttribute(Env.CURRENT_REQUEST_USER, claims);
             return true;
-        } catch (Exception e) {
-//            response.setStatus(401);
-            return true;
+        } else {
+            sendErrorResponse(response, "token无效");
+            return false;
         }
-
-
     }
 
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        //清空threadlocal中的数据
-        ThreadLocalUtil.remove();
+    private boolean isValidToken(String token) {
+        try {
+            return Boolean.TRUE.equals(stringRedisTemplate.hasKey(token));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.setContentType("application/json;charset=utf-8");
+        response.getWriter().write(objectMapper.writeValueAsString(Result.error(message)));
     }
 }
