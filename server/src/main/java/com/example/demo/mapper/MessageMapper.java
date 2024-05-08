@@ -11,13 +11,13 @@ import java.util.List;
 @Mapper
 public interface MessageMapper {
 
-    @Insert("insert into messages (username,content,userid) values (#{username},#{content},#{userid})")
-    void add(String username, String content, Integer userid);
+    @Insert("insert into messages (userid, username, content, reply, addtime) values (#{bookUserid}, #{username}, #{content}, #{reply}, #{addtime})")
+    void add(Integer bookUserid, String username, String content, Integer reply, String addtime);
 
     @Delete("delete from messages where id = #{id}")
     void deleteMessage(int id);
 
-    @Select("select * from messages")
+    @Select("select * from messages where reply IS NULL")
     List<Message> getAllMessages();
 
     @Select("select * from messages where reply = #{id}")

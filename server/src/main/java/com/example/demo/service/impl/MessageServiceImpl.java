@@ -16,7 +16,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void add(Message book) {
-        messageMapper.add(book.getUsername(), book.getContent(), book.getUserid());
+        messageMapper.add(book.getUserid(), book.getUsername(), book.getContent(), book.getReply(), book.getAddtime());
     }
 
     @Override

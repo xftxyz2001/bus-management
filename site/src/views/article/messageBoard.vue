@@ -1,59 +1,104 @@
 <template>
-  <div id="message">
-    <el-form ref="form" :model="form" label-width="80px" class="form_msg">
-      <!-- <el-form-item label="留 言 者" class="item">
-        <el-input prefix-icon="el-icon-s-promotion"></el-input>
-      </el-form-item>
-      <el-form-item label="留言时间" class="item">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="选择日期" style="width: 100%"></el-date-picker>
+  <el-container>
+    <el-header>
+      <el-row>
+        <el-col :span="18">
+          <el-input type="textarea" v-model="newMessage.content" placeholder="请输入留言内容"></el-input>
         </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker placeholder="选择时间" style="width: 100%"></el-time-picker>
+        <el-col :span="6">
+          <el-button type="primary" @click="postMessage">发布留言</el-button>
         </el-col>
-      </el-form-item> -->
-
-      <el-form-item label="留言内容" class="item">
-        <el-input type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="warning" @click="publish" class="buttonCla" icon="el-icon-upload" plain>发布留言</el-button>
-      </el-form-item>
-    </el-form>
-
-    <!-- <div id="messageSub">
-      <div v-for="message in messages">
-        <el-card class="box-card">
+      </el-row>
+    </el-header>
+    <el-main>
+      <el-card v-for="message in messages" :key="message.id" class="box-card" style="margin: 10px 0">
+        <el-card>
           <div slot="header" class="clearfix">
-            <span>留言</span>
-            <el-button
-              style="float: right; padding: 0; width: 35px; height: 35px"
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              @click="deleteMsg"
-            ></el-button>
+            <span style="font-size: 22px; font-weight: bolder; font-family: Gadget, sans-serif">
+              {{ message.username }}
+            </span>
           </div>
-          <div class="text item">
-            {{ f.name }}
-            <br />
-            {{ f.date1 }}
-            <br />
-            {{ f.date2 }}
-            <br />
-            {{ f.cont }}
+          <div>{{ message.content }}</div>
+          <div>
+            <el-button style="float: right; padding: 3px 0" type="success" @click="switchShowReply(message)">
+              查看回复
+            </el-button>
+            <span style="float: right; padding: 3px 0; margin-right: 10px">{{ message.addtime }}</span>
           </div>
         </el-card>
-      </div>
-    </div> -->
-  </div>
+        <el-card v-if="message.showReply">
+          <el-row>
+            <el-col :span="18">
+              <el-input type="textarea" v-model="message.newreply" placeholder="请输入回复内容"></el-input>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" @click="postReply(message)">发布回复</el-button>
+            </el-col>
+          </el-row>
+          <div v-if="message.replies.length" v-for="(reply, index) in message.replies" :key="index">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <span style="font-size: 18px; font-weight: bolder; font-family: Gadget, sans-serif">
+                  {{ reply.username }}
+                </span>
+              </div>
+              <div>{{ reply.content }}</div>
+              <span style="float: right; padding: 3px 0; margin-right: 10px">{{ reply.addtime }}</span>
+            </el-card>
+          </div>
+          <div v-else>暂无回复</div>
+        </el-card>
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { ElMessage } from "element-plus";
-import request from '@/utils/request.js'
+import { ElContainer, ElHeader, ElMain, ElInput, ElButton, ElCard, dividerProps } from "element-plus";
+import request from "@/utils/request";
 
+const newMessage = ref({
+  content: ""
+});
+const messages = ref([]);
 
+function fetchMessages() {
+  request.get("/message/getAll").then(res => {
+    messages.value = res.data;
+  });
+}
+fetchMessages();
+
+function switchShowReply(message) {
+  message.showReply = !message.showReply;
+  if (message.showReply) {
+    if (!message.replies) {
+      request.get(`/message/getReply?id=${message.id}`).then(res => {
+        message.replies = res.data;
+      });
+    }
+  }
+}
+
+function postMessage() {
+  request.post("/message/sayliuyan", newMessage.value).then(() => {
+    newMessage.value.content = "";
+    fetchMessages();
+  });
+}
+
+function postReply(message) {
+  request
+    .post("/message/sayliuyan", {
+      reply: message.id,
+      content: message.newreply
+    })
+    .then(() => {
+      message.newreply = "";
+      request.get(`/message/getReply?id=${message.id}`).then(res => {
+        message.replies = res.data;
+      });
+    });
+}
 </script>
