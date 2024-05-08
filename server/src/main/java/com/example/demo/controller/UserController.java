@@ -176,4 +176,17 @@ public class UserController {
         userService.sendResetPassword(email);
         return Result.success("重置密码邮件已发送至您的邮箱。");
     }
+
+    // 获取用户角色
+    @GetMapping("/role")
+    public Result<String> getRole(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
+        User user = userService.findByID(userId);
+        if (User.ROLE_USER.equals(user.getIdentify())) {
+            return Result.success("用户");
+        } else if (User.ROLE_ADMIN.equals(user.getIdentify())) {
+            return Result.success("管理员");
+        } else {
+            return Result.success("未知");
+        }
+    }
 }

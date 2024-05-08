@@ -1,7 +1,7 @@
 <script>
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { ref } from "vue";
-import axios from "axios"; // 需要引入axios
+import request from "@/utils/request.js";
 import { deleteBoard } from "@/api/user.js";
 import { ElMessage } from "element-plus";
 
@@ -27,18 +27,19 @@ export default {
     const filteredNotice = ref([]);
     const searchKeyword = ref("");
 
-    axios.defaults.baseURL = "http://localhost:8080";
-
     // 从后端获取公告信息
-    const fetchNotice = async () => {
-      try {
-        const response = await axios.get("/board/getAllboard");
-        currentNotice1.value = response.data.data;
-        currentNotice.value = response.data.data;
-        filteredNotice.value = response.data.data;
-      } catch (error) {
-        console.error("Error fetching notice:", error);
-      }
+    const fetchNotice = () => {
+      request({
+        url: "/board/getAllboard",
+        method: "get"
+      })
+        .then(res => {
+          currentNotice.value = res.data;
+          filteredNotice.value = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     };
 
     //模糊搜索
@@ -59,89 +60,34 @@ export default {
     const clearAddForm = () => {
       newNoticeForm.value = { title: "", content: "" };
     };
-    const addNotice = async () => {
-      try {
-        const response = await axios.post("/board/declare", {
+
+    const addNotice = () => {
+      request({
+        url: "/board/declare",
+        method: "post",
+        data: {
           title: newNoticeForm.value.title,
           content: newNoticeForm.value.content
-        });
-        if (response.data) {
-          await fetchNotice(); // 更新公告列表
-          clearAddForm(); // 清空新增公告表单
-          addDialogVisible.value = false; // 关闭新增公告对话框
-          ElMessage.success("添加成功");
-          console.log("公告添加成功");
-        } else {
-          console.error("Failed to add board:", response.data.error);
-          console.log("公告添加失败");
         }
-      } catch (error) {
-        console.error("Error adding board:", error);
-        console.log("公告添加失败");
-      }
+      })
+        .then(res => {
+          console.log(res);
+          if (res.data) {
+            fetchNotice();
+            clearAddForm();
+            addDialogVisible.value = false;
+            ElMessage.success("添加成功");
+            console.log("公告添加成功");
+          } else {
+            console.error("Failed to add board:", res.data.error);
+            console.log("公告添加失败");
+          }
+        })
+        .catch(err => {
+          console.error("Error adding board:", err);
+          console.log("公告添加失败");
+        });
     };
-
-    // const addNotice = async () => {
-    //   try {
-    //     const response = await axios.post('/board/declare', { title: newTitle.value, content: newNotice.value });
-    //     if (response.data) {
-    //       console.log(response.data.success);
-    //       await fetchNotice(); // 更新公告列表
-    //       newNotice.value = ''; // 清空输入框
-    //       newTitle.value = ''; // 清空标题输入框
-    //       ElMessage.success("添加成功");
-    //       console.log('公告添加成功');
-
-    //     } else {
-    //       console.log('新公告标题:', newTitle.value);
-    //       console.log('新公告内容:', newNotice.value);
-
-    //       console.error('Failed to add board:', response.data.error);
-    //       console.log('公告添加失败');
-    //     }
-    //   } catch (error) {
-    //     console.log('新公告标题:', newTitle.value);
-    //     console.log('新公告内容:', newNotice.value);
-
-    //     console.error('Error adding board:', error);
-    //     console.log('公告添加失败');
-    //   }
-    // };
-    //修改公告
-    // const editNotice = async () => {
-    //   try {
-    //     if (!editedNotice.value) {
-    //   console.error('Edited notice is null or undefined');
-    //   return;
-    // }
-    //     const response = await axios.post('/board/revise', { id: editedNotice.value.id, title: editedNotice.value.title, content: editedNotice.value.content });
-
-    //     if (response.data.success) {
-    //       await fetchNotice(); // 更新公告列表
-    //       console.log('公告修改成功');
-    //     } else {
-    //       console.error('Failed to update board:', response.data.error);
-
-    //       console.log('公告修改失败');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error updating board:', error);
-    //     console.log(editedNotice.value.id);
-    //     console.log( editedNotice.value.title);
-    //     console.log('公告修改失败');
-    //   } finally {
-    //     editedNotice.value = null; // 清空正在编辑的公告
-    //   }
-    // };
-
-    // const deleteNotice = async (id) => {
-    //   try {
-    //     await axios.delete('/board/delete/${id}');
-    //     await fetchNotice(); // 删除成功后刷新公告列表
-    //   } catch (error) {
-    //     console.error('Error deleting notice:', error);
-    //   }
-    // };
 
     //删除公告
     function deleteNotice(row) {
@@ -164,31 +110,31 @@ export default {
       editDialogVisible.value = false;
     };
 
-    const updateNotice = async () => {
-      try {
-        console.log(editedNotice.value.id);
-        console.log(editedNotice.value.title);
-        const response = await axios.post("/board/revise", {
+    const updateNotice = () => {
+      request({
+        url: "/board/revise",
+        method: "post",
+        data: {
           id: editedNotice.value.id,
           title: editedNotice.value.title,
           content: editedNotice.value.content
-        });
-        console.log(response.data);
-        console.log(response.data.success);
-        if (response.data) {
-          await fetchNotice();
-          console.log(response.data);
-          editDialogVisible.value = false;
-          ElMessage.success("修改成功");
-          console.log("公告修改成功");
-        } else {
-          console.error("Failed to update board:", response.data.error);
-          console.log("公告修改失败");
         }
-      } catch (error) {
-        console.error("Error updating board:", error);
-        console.log("公告修改失败");
-      }
+      })
+        .then(res => {
+          if (res.data) {
+            fetchNotice();
+            editDialogVisible.value = false;
+            ElMessage.success("修改成功");
+            console.log("公告修改成功");
+          } else {
+            console.error("Failed to update board:", res.data.error);
+            console.log("公告修改失败");
+          }
+        })
+        .catch(err => {
+          console.error("Error updating board:", err);
+          console.log("公告修改失败");
+        });
     };
 
     // 页面加载时获取公告信息
@@ -243,26 +189,16 @@ export default {
           <el-table-column prop="updateTime" label="修改时间"></el-table-column>
 
           <el-table-column label="操作" width="100">
-            <!-- <el-button @click="deleteNotice(currentNotice.id)" type="danger">删除</el-button> -->
             <template #default="{ row }">
               <el-button @click="showEditDialog(row)" type="primary">编辑</el-button>
               <el-button @click="deleteNotice(row)" type="danger">删除</el-button>
-
-              <!-- <el-button :icon="Edit" circle plain type="primary"></el-button>
-                    <el-button :icon="Delete" circle plain type="danger"></el-button> -->
             </template>
           </el-table-column>
         </el-table>
       </el-card>
-      <!-- <p>{{ currentNotice }}</p>
-        <h2>新公告标题：</h2>
-        <el-input v-model="newTitle" placeholder="请输入新公告标题"></el-input>
-        <h2>新公告内容：</h2>
-        <el-input v-model="newNotice" type="textarea" rows="4" placeholder="请输入新公告内容"></el-input>
-         <el-button @click="updateNotice" type="primary">更新公告</el-button> 
-        <el-button @click="addNotice" type="success">增加公告</el-button>-->
     </div>
   </div>
+
   <el-dialog title="新增公告" v-model="addDialogVisible" @close="clearAddForm">
     <el-form ref="addForm" :model="newNoticeForm" label-width="80px">
       <el-form-item label-width="100px" label="新公告标题">

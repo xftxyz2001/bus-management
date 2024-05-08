@@ -2,6 +2,11 @@
 import { ElMessage, ElSelect, ElOption } from "element-plus";
 import axios from "axios";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { userRegisterService, userLoginService } from "../api/user.js";
+
+const router = useRouter();
+
 const isRegister = ref(false);
 //定义数据模型
 const registerData = ref({
@@ -21,19 +26,6 @@ const genderOptions = ref([
   { label: "女", value: 0 },
   { label: "男", value: 1 }
 ]);
-// const rules = {
-//     username: [
-//         { required: true, message: '请输入用户名', trigger: 'blur' },
-//         { min: 5, max: 16, message: '长度为5~16位非空字符', trigger: 'blur' }
-//     ],
-//     password: [
-//         { required: true, message: '请输入密码', trigger: 'blur' },
-//         { min: 5, max: 16, message: '长度为5~16位非空字符', trigger: 'blur' }
-//     ],
-//     rePassword: [
-//         { validator: checkRePassword, trigger: 'blur' }
-//     ]
-// }
 
 //校验密码的函数
 const checkRePassword = (rule, value, callback) => {
@@ -46,25 +38,19 @@ const checkRePassword = (rule, value, callback) => {
   }
 };
 
-import { userRegisterService, userLoginService } from "../api/user.js";
-import { useRouter } from "vue-router";
-// import { useTokenStore } from '@/store/token.js';
-// import { userRegisterService} from '@/api/user.js'
 const register = async () => {
   //registerData是一个响应式对象,如果要获取值,需要.value
   let result = await userRegisterService(registerData.value);
 
   ElMessage.success(result.msg ? result.msg : "注册成功");
+  isRegister.value = false;
 };
 
-const router = useRouter();
-//  const tokenStore = useTokenStore()
 const login = async () => {
   let result = await userLoginService(registerData.value);
 
   ElMessage.success(result.msg ? result.msg : "登录成功");
 
-  // tokenStore.setToken(result.data)
   router.push("/success");
 };
 

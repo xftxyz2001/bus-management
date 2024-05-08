@@ -13,7 +13,7 @@ public interface UserMapper {
     @Select("select * from user where username = #{username}")
     User findByUserName(String username);
 
-    @Insert("insert into user(username,password,age,gender,phone) values (#{username},#{password},#{age},#{gender},#{phone})")
+    @Insert("insert into user(username,password,age,gender,phone,identify) values (#{username},#{password},#{age},#{gender},#{phone},0)")
     void add(String username, String password, int age, int gender, String phone);
 
     @Update("update user set age = #{age},gender=#{gender},phone=#{phone} where id = #{id}")
