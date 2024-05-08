@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/message")
 @Validated
-@CrossOrigin
 public class messageController {
     @Autowired
     private messageService messageService;

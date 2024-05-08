@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/board")
-@CrossOrigin
 @Validated
 public class boardController {
     @Autowired

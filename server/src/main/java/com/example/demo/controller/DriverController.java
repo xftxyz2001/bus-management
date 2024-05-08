@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/driver")
 @Validated
-@CrossOrigin
 public class DriverController {
 
     @Autowired

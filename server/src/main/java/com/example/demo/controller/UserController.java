@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/user")
 @Validated
-@CrossOrigin
 @SuppressWarnings("all")
 public class UserController {
 

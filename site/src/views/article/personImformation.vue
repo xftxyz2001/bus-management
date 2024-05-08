@@ -14,7 +14,9 @@
           <el-col :span="12">
             <el-form label-position="top" class="profile-form">
               <el-form-item label="性别">
-                <el-tag>{{ gender }}</el-tag>
+                <el-tag v-if="gender === 0" type="danger">女</el-tag>
+                <el-tag v-else-if="gender === 1">男</el-tag>
+                <el-tag v-else type="info">保密</el-tag>
               </el-form-item>
               <el-form-item label="姓名">
                 <span>{{ username }}</span>
@@ -33,10 +35,16 @@
           </el-col>
         </el-row>
       </div>
+      <!-- 分割线 -->
+      <el-divider></el-divider>
+      <el-button type="danger" @click="logout" style="float: right;margin-right: -20px;margin-top: -10px;">退出登录</el-button>
     </el-card>
-    <el-row style="text-align: left">
-      <el-button type="danger" @click="logout" style="margin: 2px 0 10px 830px; font-size: 22px">退出登录</el-button>
-    </el-row>
+    
+    <!-- <div>
+      <el-button type="danger" @click="logout" style="float: right;">退出登录</el-button>
+    </div> -->
+    <!-- <el-row style="text-align: left"> -->
+    <!-- </el-row> -->
   </div>
 </template>
 

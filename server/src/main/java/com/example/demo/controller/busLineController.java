@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/bus")
 @Validated
-@CrossOrigin
 public class busLineController {
     @Autowired
     private busLineService busLineService;
