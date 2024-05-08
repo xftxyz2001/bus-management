@@ -37,7 +37,7 @@ public class UserController {
     private EmailService emailService;
 
     @PostMapping("/add")
-    public Result add(User a) {
+    public Result add(@RequestBody User a) {
         User u = userService.findByUserName(a.getUsername());
         if (u == null) {
             userService.add(a);
