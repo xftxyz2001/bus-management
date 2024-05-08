@@ -12,7 +12,7 @@ import java.util.List;
 public interface messageMapper {
 
     @Insert("insert into messages (username,content,userid) values (#{username},#{content},#{userid})")
-    void add(String username, String content,Integer userid);
+    void add(String username, String content, Integer userid);
 
     @Delete("delete from messages where id = #{id}")
     void deleteMessage(int id);

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
+
     @Override
     public void sendEmail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();

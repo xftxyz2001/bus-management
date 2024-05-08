@@ -12,6 +12,7 @@ import java.util.List;
 public class DriverServiceImpl implements DriverService {
     @Autowired
     private DriverMapper driverMapper;
+
     @Override
     public List<Driver> getAllDrivers() {
         return driverMapper.getAllDrivers();
@@ -19,7 +20,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void addDriver(Driver driver) {
-        driverMapper.addDriver(driver.getName(),driver.getAge(),driver.getGender(),driver.getLicenseNumber(),driver.getPhone(),driver.getWorkLocation());
+        driverMapper.addDriver(driver.getName(), driver.getAge(), driver.getGender(), driver.getLicenseNumber(), driver.getPhone(), driver.getWorkLocation());
     }
 
     @Override
@@ -29,7 +30,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void updateDriver(int id, Driver driver) {
-        driverMapper.updateDriver(id,driver);
+        driverMapper.updateDriver(id, driver);
     }
 
     @Override

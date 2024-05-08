@@ -12,9 +12,10 @@ import java.util.List;
 public class busLineServiceImpl implements busLineService {
     @Autowired
     private busLineMapper busLineMapper;
+
     @Override
     public void add(busLine bus) {
-        busLineMapper.tianjia(bus.getCity(),bus.getStartstation(),bus.getEndstation(),bus.getRoutesite(),bus.getBusid(),bus.getRuntime(),bus.getPrice());
+        busLineMapper.tianjia(bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
     }
 
     @Override
@@ -24,7 +25,7 @@ public class busLineServiceImpl implements busLineService {
 
     @Override
     public void registerbus(busLine bus) {
-        busLineMapper.zengjia(bus.getCity(),bus.getStartstation(),bus.getEndstation(),bus.getRoutesite(),bus.getBusid(),bus.getRuntime(),bus.getPrice());
+        busLineMapper.zengjia(bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
     }
 
     @Override

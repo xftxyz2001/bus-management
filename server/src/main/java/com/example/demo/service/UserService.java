@@ -1,22 +1,22 @@
 package com.example.demo.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.demo.pojo.User;
 
 import java.util.List;
 
-public interface UserService  {
-       User findByID(Integer id);
+public interface UserService {
+    User findByID(Integer id);
 
-      //根据用户名查询用户
-       User findByUserName(String username);
+    //根据用户名查询用户
+    User findByUserName(String username);
 
-       User findByEmail(String email);
+    User findByEmail(String email);
+
     //注册
-        void register(String username,String password,int age,int gender,String phone);
+    void register(String username, String password, int age, int gender, String phone);
 
-        //更新
-        void update(User user);
+    //更新
+    void update(User user);
 
     void updatePwd(String newPwd);
 

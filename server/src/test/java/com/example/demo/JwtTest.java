@@ -21,8 +21,8 @@ public class JwtTest {
         claims.put("username", "白眉鹰王");
         //生成jwt的代码
         String token = JWT.create()
-                .withClaim("user",  claims)//添加载荷
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 *60 * 60 * 12))//添加过期时间
+                .withClaim("user", claims)//添加载荷
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 12))//添加过期时间
                 .sign(Algorithm.HMAC256("itheima"));//指定算法,配置秘钥
 
         System.out.println(token);

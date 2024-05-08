@@ -19,31 +19,32 @@ public class boardController {
     private boardService boardService;
 
     @GetMapping("/getAllboard")
-    public Result getAllBoard(){
-      List<board> all = boardService.getAll();
-      return Result.success(all);
+    public Result getAllBoard() {
+        List<board> all = boardService.getAll();
+        return Result.success(all);
     }
 
     @PostMapping("/declare")
-    public Result declare(@RequestBody board message){
+    public Result declare(@RequestBody board message) {
         boardService.add(message);
 //        System.out.println(message.getTitle());
         return Result.success("success");
     }
 
     @DeleteMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Integer id){
-         boardService.deleteBoard(id);
+    public Result delete(@PathVariable("id") Integer id) {
+        boardService.deleteBoard(id);
         return Result.success();
     }
+
     @PostMapping("/revise")
-    public Result revise(@RequestBody board message){
+    public Result revise(@RequestBody board message) {
         boardService.revise(message);
         return Result.success("success");
     }
 
     @GetMapping("/search")
-    public Result<List<board>> searchNotice(@RequestParam String keyword){
+    public Result<List<board>> searchNotice(@RequestParam String keyword) {
         List<board> notices = boardService.searchNotices(keyword);
         return Result.success(notices);
     }

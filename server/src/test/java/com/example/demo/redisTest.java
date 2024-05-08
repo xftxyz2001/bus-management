@@ -13,17 +13,18 @@ public class redisTest {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
     @Test
-    public void testSet(){
-   ValueOperations<String,String>operations= stringRedisTemplate.opsForValue();
-   operations.set("username","zhangsan");
-   operations.set("id","1",15, TimeUnit.SECONDS);
+    public void testSet() {
+        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+        operations.set("username", "zhangsan");
+        operations.set("id", "1", 15, TimeUnit.SECONDS);
 
     }
 
     @Test
-    public void testGet(){
-        ValueOperations<String,String> operations = stringRedisTemplate.opsForValue();
+    public void testGet() {
+        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
         System.out.println(operations.get("username"));
     }
 }

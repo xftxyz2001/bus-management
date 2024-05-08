@@ -9,9 +9,9 @@ import java.util.UUID;
 
 public class JwtUtil {
 
-    private static final String KEY ="software";
-	
-	//接收业务数据,生成token并返回
+    private static final String KEY = "software";
+
+    //接收业务数据,生成token并返回
     public static String genToken(Map<String, Object> claims) {
 //        return JWT.create()
 //                .withClaim("claims", claims)
@@ -20,12 +20,12 @@ public class JwtUtil {
         String salt = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8); // 生成随机盐值
         String token = JWT.create()
                 .withClaim("claims", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .sign(Algorithm.HMAC256(KEY + salt)); // 使用密钥和盐值进行签名
         return token;
     }
 
-	//接收token,验证token,并返回业务数据
+    //接收token,验证token,并返回业务数据
     public static Map<String, Object> parseToken(String token) {
 //        return JWT.require(Algorithm.HMAC256(KEY))
 //                .build()

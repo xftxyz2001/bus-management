@@ -24,11 +24,11 @@ public class messageController {
     //添加留言
 
     @PostMapping("/sayliuyan")
-    public Result addcontext(message book){
+    public Result addcontext(message book) {
         User u = userServicel.findByUserName(book.getUsername());
-        if (u==null){
+        if (u == null) {
             return Result.error("该用户名不存在，请重新输入");
-        }else {
+        } else {
             messageService.add(book);
             return Result.success();
         }
@@ -36,21 +36,21 @@ public class messageController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Result deleteMessage(@PathVariable int id){
-             messageService.deleteMessage(id);
-            return Result.success("删除成功");
+    public Result deleteMessage(@PathVariable int id) {
+        messageService.deleteMessage(id);
+        return Result.success("删除成功");
 
-        }
+    }
 
     //显示所有留言
     @GetMapping("/getAll")
-    public Result getAllMessages(){
+    public Result getAllMessages() {
 
-   List<message> messages =  messageService.getAllMessages();
+        List<message> messages = messageService.getAllMessages();
         return Result.success(messages);
 
     }
-    }
+}
 
 
 

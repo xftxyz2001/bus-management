@@ -26,7 +26,7 @@ public class DriverController {
     }
 
     @PostMapping("/addDrivers")
-    public Result addDriver( Driver driver) {
+    public Result addDriver(Driver driver) {
         DriverService.addDriver(driver);
         return Result.success();
     }
@@ -45,9 +45,9 @@ public class DriverController {
     public Result deleteDriver(@PathVariable int id) {
         DriverService.deleteDriver(id);
         Driver d = DriverService.getDriverById(id);
-        if (d == null){
+        if (d == null) {
             return Result.success("删除成功");
-        }else {
+        } else {
             return Result.error("出现错误");
         }
     }
