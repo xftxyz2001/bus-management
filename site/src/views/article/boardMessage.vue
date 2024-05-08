@@ -45,7 +45,9 @@ export default {
     //模糊搜索
     const searchNotice = () => {
       // 根据搜索关键字过滤公告列表
-      filteredNotice.value = currentNotice.value.filter(notice => notice.title.includes(searchKeyword.value));
+      filteredNotice.value = currentNotice.value.filter(
+        notice => notice.title.includes(searchKeyword.value) || notice.content.includes(searchKeyword.value)
+      );
     };
 
     // 增加公告
@@ -182,7 +184,7 @@ export default {
           </div>
         </template>
 
-        <el-table :data="currentNotice" style="width: 100%">
+        <el-table :data="filteredNotice" style="width: 100%">
           <el-table-column prop="createTime" label="时间"></el-table-column>
           <el-table-column prop="title" label="标题"></el-table-column>
           <el-table-column prop="content" label="内容"></el-table-column>
