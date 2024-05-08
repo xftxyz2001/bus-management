@@ -17,12 +17,15 @@ public class busLineController {
     private busLineService busLineService;
 
     @PostMapping("/add")
-    public Result add(busLine bus) {
-        System.out.println(bus.getBusid());
+    public Result add(@RequestBody busLine bus) {
+        if (bus == null) {
+            return Result.error("参数错误");
+        }
+        if (bus.getBusid() == null) {
+            return Result.error("请输入公交线路");
+        }
+
         busLine b = busLineService.findBybusid(bus.getBusid());
-        System.out.println(bus.getCity());
-        System.out.println(bus.getRuntime());
-        System.out.println(bus.getPrice());
         if (b == null) {
             busLineService.registerbus(bus);
             return Result.success();
@@ -37,5 +40,22 @@ public class busLineController {
         return Result.success(all);
     }
 
+    @GetMapping("/getByBusid")
+    public Result getByBusid(String busid) {
+        busLine bus = busLineService.findBybusid(busid);
+        return Result.success(bus);
+    }
+
+    @PostMapping("/update")
+    public Result update(@RequestBody busLine bus) {
+        busLineService.update(bus);
+        return Result.success();
+    }
+
+    @DeleteMapping("/delete")
+    public Result delete(String id) {
+        busLineService.delete(id);
+        return Result.success();
+    }
 
 }

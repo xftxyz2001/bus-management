@@ -32,4 +32,14 @@ public class busLineServiceImpl implements busLineService {
     public List<busLine> getAll() {
         return busLineMapper.getAll();
     }
+
+    @Override
+    public void update(busLine bus) {
+        busLineMapper.update(bus.getId(), bus.getCity(), bus.getStartstation(), bus.getEndstation(), bus.getRoutesite(), bus.getBusid(), bus.getRuntime(), bus.getPrice());
+    }
+
+    @Override
+    public void delete(String id) {
+        busLineMapper.delete(id);
+    }
 }

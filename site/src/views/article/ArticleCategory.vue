@@ -1,16 +1,97 @@
 <script setup>
-import { getAllbus } from "@/api/user.js";
+import request from "@/utils/request";
 import { Edit, Delete } from "@element-plus/icons-vue";
 import { ref } from "vue";
 
 const busDatas = ref([]);
-const getData1 = async () => {
-  let res = await getAllbus();
-  busDatas.value = res.data;
-  // this.total=res.data.length;
-  console.log(busDatas.value);
-};
-getData1();
+
+// 新增/编辑弹窗数据
+const dialogVisible = ref(false);
+const dialogTitle = ref("");
+
+const bus = ref({
+  id: "",
+  busid: "",
+  startstation: "",
+  endstation: "",
+  runtime: "",
+  price: "",
+  routesite: "",
+  city: ""
+});
+
+function getBusData() {
+  request({
+    url: "/bus/getAll",
+    method: "get"
+  }).then(res => {
+    busDatas.value = res.data;
+  });
+}
+
+function addBus() {
+  request({
+    url: "/bus/add",
+    method: "post",
+    data: bus.value
+  }).then(res => {
+    getBusData();
+  });
+}
+
+function updateBus() {
+  request({
+    url: "/bus/update",
+    method: "post",
+    data: bus.value
+  }).then(res => {
+    getBusData();
+  });
+}
+
+function deleteBus(id) {
+  request({
+    url: "/bus/delete",
+    method: "delete",
+    params: {
+      id
+    }
+  }).then(res => {
+    getBusData();
+  });
+}
+
+function showUpdateDialog(row) {
+  dialogVisible.value = true;
+  dialogTitle.value = "编辑公交车信息";
+  bus.value = { ...row };
+}
+
+function showAddDialog() {
+  dialogVisible.value = true;
+  dialogTitle.value = "新增公交车信息";
+  bus.value = {
+    id: "",
+    busid: "",
+    startstation: "",
+    endstation: "",
+    runtime: "",
+    price: "",
+    routesite: "",
+    city: ""
+  };
+}
+
+function addOrUpdateBus() {
+  if (dialogTitle.value === "新增公交车信息") {
+    addBus();
+  } else {
+    updateBus(bus.value);
+  }
+  dialogVisible.value = false;
+}
+
+getBusData();
 </script>
 
 <template>
@@ -19,7 +100,7 @@ getData1();
       <div class="header">
         <span>公交车信息</span>
         <div class="extra">
-          <el-button type="primary">添加信息</el-button>
+          <el-button type="primary" @click="showAddDialog">添加信息</el-button>
         </div>
       </div>
     </template>
@@ -34,8 +115,8 @@ getData1();
       <el-table-column label="路线" prop="routesite"></el-table-column>
       <el-table-column label="操作" width="100">
         <template #default="{ row }">
-          <el-button :icon="Edit" circle plain type="primary"></el-button>
-          <el-button :icon="Delete" circle plain type="danger"></el-button>
+          <el-button :icon="Edit" circle plain type="primary" @click="showUpdateDialog(row)"></el-button>
+          <el-button :icon="Delete" circle plain type="danger" @click="deleteBus(row.id)"></el-button>
         </template>
       </el-table-column>
       <template #empty>
@@ -43,6 +124,37 @@ getData1();
       </template>
     </el-table>
   </el-card>
+
+  <!-- 新增/编辑弹窗 -->
+  <el-dialog v-model="dialogVisible" title="新增/编辑公交车信息">
+    <el-form :model="bus" label-width="80px">
+      <el-form-item label="公交线路" prop="busid">
+        <el-input v-model="bus.busid" />
+      </el-form-item>
+      <el-form-item label="起点" prop="startstation">
+        <el-input v-model="bus.startstation" />
+      </el-form-item>
+      <el-form-item label="终点" prop="endstation">
+        <el-input v-model="bus.endstation" />
+      </el-form-item>
+      <el-form-item label="运营时间" prop="runtime">
+        <el-input v-model="bus.runtime" />
+      </el-form-item>
+      <el-form-item label="参考票价" prop="price">
+        <el-input v-model="bus.price" />
+      </el-form-item>
+      <el-form-item label="路线" prop="routesite">
+        <el-input v-model="bus.routesite" />
+      </el-form-item>
+      <el-form-item label="城市" prop="city">
+        <el-input v-model="bus.city" />
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="addOrUpdateBus">确 定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped>

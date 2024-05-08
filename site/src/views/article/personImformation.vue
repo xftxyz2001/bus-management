@@ -4,7 +4,7 @@
       <div slot="header" class="profile-header">
         <el-avatar :size="120" :src="avatarUrl"></el-avatar>
         <div class="profile-info">
-          <h2 class="profile-name">{{ id }}</h2>
+          <h2 class="profile-name">{{ username }}</h2>
           <p class="profile-email">{{ email }}</p>
         </div>
       </div>
@@ -18,7 +18,7 @@
                 <el-tag v-else-if="gender === 1">男</el-tag>
                 <el-tag v-else type="info">保密</el-tag>
               </el-form-item>
-              <el-form-item label="姓名">
+              <el-form-item label="用户名">
                 <span>{{ username }}</span>
               </el-form-item>
             </el-form>

@@ -12,4 +12,8 @@ public interface busLineService {
     void registerbus(busLine bus);
 
     List<busLine> getAll();
+
+    void update(busLine bus);
+
+    void delete(String id);
 }

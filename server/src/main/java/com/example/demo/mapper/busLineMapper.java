@@ -1,9 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.pojo.busLine;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,4 +18,10 @@ public interface busLineMapper {
 
     @Select("select * from busline")
     List<busLine> getAll();
+
+    @Update("update busline set city = #{city},startstation = #{startstation},endstation = #{endstation},routesite = #{routesite},busid = #{busid},runtime = #{runtime},price = #{price} where id = #{id}")
+    void update(Integer id, String city, String startstation, String endstation, String routesite, String busid, String runtime, String price);
+
+    @Delete("delete from busline where id = #{id}")
+    void delete(String id);
 }
