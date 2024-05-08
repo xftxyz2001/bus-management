@@ -28,8 +28,8 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (isValidToken(token)) {
-            Map<String, Object> claims = JwtUtil.parseToken(token);
-            request.setAttribute(Env.CURRENT_REQUEST_USER, claims);
+            Integer userId = JwtUtil.parseToken(token);
+            request.setAttribute(Env.CURRENT_REQUEST_USER, userId);
             return true;
         } else {
             sendErrorResponse(response, "token无效");

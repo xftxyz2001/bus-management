@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.config.Env;
 import com.example.demo.pojo.Result;
 import com.example.demo.pojo.User;
 import com.example.demo.service.EmailService;
@@ -79,13 +80,13 @@ public class UserController {
         //判断密码是否正确  loginUser对象中的password是密文
         if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
             //登录成功
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("id", loginUser.getId());
-            claims.put("username", loginUser.getUsername());
-            String token = JwtUtil.genToken(claims);
+            // Map<String, Object> claims = new HashMap<>();
+            // claims.put("id", loginUser.getId());
+            // claims.put("username", loginUser.getUsername());
+            String token = JwtUtil.generateToken(loginUser.getId());
             //把token存储到redis中
             ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-            operations.set(token, token, 1, TimeUnit.HOURS);
+            operations.set(token, token, JwtUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
             userService.updateToken(username, token);
             return Result.success(token);
             //return Result.success("密码正确");
@@ -113,10 +114,10 @@ public class UserController {
 
     //获取当前登录用户信息
     @GetMapping("/current")
-    public Result<User> getCurrent(String username) {
-        System.out.println(username);
-        User a = userService.findByUserName(username);
-        return Result.success(a);
+    public Result<User> getCurrent(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
+        User user = userService.findByID(userId);
+        user.setPassword(null);
+        return Result.success(user);
     }
 
 
