@@ -50,7 +50,7 @@ const login = async () => {
 
   ElMessage.success(result.msg ? result.msg : "登录成功");
 
-  router.push("/success");
+  router.push("/main");
 };
 
 const gotoforgerPassword = () => {

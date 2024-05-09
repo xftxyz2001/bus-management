@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center; height: 100%; padding: 20px 0 0 0; margin: 0px">
+  <div class="box">
     <div class="welcome">
       <b>
         <span>欢迎使用公交车信息管理系统，</span>
@@ -18,21 +18,24 @@
 </template>
 
 <script setup>
-import DateUtils from "./DateUtils.vue";
+import DateUtils from "@/components/DateUtils.vue";
 import { ref } from "vue";
 import request from "@/utils/request";
 
 const role = ref("");
 
-request({
-  url: "/user/role",
-  method: "get"
-}).then(res => {
+request.get("/user/role").then(res => {
   role.value = res.data;
 });
 </script>
 
 <style scoped>
+.box {
+  text-align: center;
+  height: 100%;
+  padding: 20px 0 0 0;
+  margin: 0px;
+}
 .welcome {
   font-size: 30px;
   color: #fff;

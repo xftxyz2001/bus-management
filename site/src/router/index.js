@@ -1,34 +1,44 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import LoginVue from "@/views/login.vue";
+import LoginAndRegisterVue from "@/views/LoginAndRegister.vue";
+import ForgetPasswordVue from "@/views/ForgetPassword.vue";
+
 import LayoutVue from "@/views/layout.vue";
-import ArticleCategoryVue from "@/views/article/ArticleCategory.vue";
-import ArticleManageVue from "@/views/article/ArticleManage.vue";
-import ArticleIndexpage from "@/views/article/ArticleIndexpage.vue";
-import boardMessage from "@/views/article/boardMessage.vue";
-import personImformation from "@/views/article/personImformation.vue";
-import messageBoard from "@/views/article/messageBoard.vue";
-import driverManage from "@/views/article/driverManage.vue";
-import busSearch from "@/views/article/busSearch.vue";
-import forgetPassword from "@/views/article/forgetPassword.vue";
+
+import IndexVue from "@/views/article/inedx.vue";
+import PersonalVue from "@/views/article/personal.vue";
+import NoticeVue from "@/views/article/notice.vue";
+import BusInfoVue from "@/views/article/businfo.vue";
+import UserVue from "@/views/article/user.vue";
+import DriverVue from "@/views/article/driver.vue";
+import BusSearchVue from "@/views/article/bussearch.vue";
+import MessageVue from "@/views/article/message.vue";
 
 const routes = [
   { path: "/", redirect: "/login" },
-  { path: "/login", component: LoginVue },
-  { path: "/forget", component: forgetPassword },
+  { path: "/login", component: LoginAndRegisterVue },
+  { path: "/forget", component: ForgetPasswordVue },
   {
-    path: "/success",
+    path: "/main",
     component: LayoutVue,
-    redirect: "/success/indexpage",
+    redirect: "/main/index",
     children: [
-      { path: "/success/category", component: ArticleCategoryVue },
-      { path: "/success/manage", component: ArticleManageVue },
-      { path: "/success/indexpage", component: ArticleIndexpage },
-      { path: "/success/notice", component: boardMessage },
-      { path: "/success/personal", component: personImformation },
-      { path: "/success/message", component: messageBoard },
-      { path: "/success/driver", component: driverManage },
-      { path: "/success/bussearch", component: busSearch }
+      // 首页
+      { path: "/main/index", component: IndexVue },
+      // 个人信息
+      { path: "/main/personal", component: PersonalVue },
+      // 公告栏
+      { path: "/main/notice", component: NoticeVue },
+      // 公交车信息
+      { path: "/main/businfo", component: BusInfoVue },
+      // 用户管理
+      { path: "/main/user", component: UserVue },
+      // 司机管理
+      { path: "/main/driver", component: DriverVue },
+      // 公交查询
+      { path: "/main/bussearch", component: BusSearchVue },
+      // 留言板
+      { path: "/main/message", component: MessageVue }
     ]
   }
 ];

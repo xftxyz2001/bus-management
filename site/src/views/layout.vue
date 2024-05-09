@@ -4,7 +4,7 @@
     <el-container style="height: 94%">
       <!-- default-active设置进入页面时默认打开的菜单条目路由（这里的/indexpage是首页菜单条目的路由）；:router设置为真，打开路由；:collapse这里联合折叠图标实现菜单折叠与展开 -->
       <el-menu
-        default-active="/success/indexpage"
+        default-active="/main/indexpage"
         :router="true"
         :collapse="isCollapse"
         background-color="#545c64"
@@ -21,7 +21,7 @@
             <span>主页面</span>
           </template>
           <!-- index为对应菜单条目的路由，在router文件夹的index.js中设置 -->
-          <el-menu-item index="/success/indexpage">首页</el-menu-item>
+          <el-menu-item index="/main/index">首页</el-menu-item>
         </el-submenu>
 
         <el-submenu index="2">
@@ -29,7 +29,7 @@
             <i class="el-icon-s-data icon"></i>
             <span>数据显示</span>
           </template>
-          <el-menu-item index="/success/personal">个人信息</el-menu-item>
+          <el-menu-item index="/main/personal">个人信息</el-menu-item>
         </el-submenu>
 
         <el-submenu index="3">
@@ -37,14 +37,14 @@
             <i class="el-icon-s-data icon"></i>
             <span>公告栏</span>
           </template>
-          <el-menu-item index="/success/notice">公告栏</el-menu-item>
+          <el-menu-item index="/main/notice">公告栏</el-menu-item>
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">
             <i class="el-icon-s-data icon"></i>
             <span>公交车信息</span>
           </template>
-          <el-menu-item index="/success/category">公交车信息</el-menu-item>
+          <el-menu-item index="/main/businfo">公交车信息</el-menu-item>
         </el-submenu>
 
         <el-submenu index="5">
@@ -52,7 +52,7 @@
             <i class="el-icon-s-custom icon"></i>
             <span>用户管理</span>
           </template>
-          <el-menu-item index="/success/manage">用户管理</el-menu-item>
+          <el-menu-item index="/main/user">用户管理</el-menu-item>
         </el-submenu>
 
         <el-submenu index="6">
@@ -60,7 +60,7 @@
             <i class="el-icon-s-custom icon"></i>
             <span>司机管理</span>
           </template>
-          <el-menu-item index="/success/driver">司机管理</el-menu-item>
+          <el-menu-item index="/main/driver">司机管理</el-menu-item>
         </el-submenu>
 
         <el-submenu index="7">
@@ -68,7 +68,7 @@
             <i class="el-icon-s-custom icon"></i>
             <span>公交查询</span>
           </template>
-          <el-menu-item index="/success/bussearch">公交查询</el-menu-item>
+          <el-menu-item index="/main/bussearch">公交查询</el-menu-item>
         </el-submenu>
 
         <el-submenu index="8">
@@ -76,7 +76,7 @@
             <i class="el-icon-s-custom icon"></i>
             <span>留言板</span>
           </template>
-          <el-menu-item index="/success/message">留言板</el-menu-item>
+          <el-menu-item index="/main/message">留言板</el-menu-item>
         </el-submenu>
 
         <el-submenu index="9">
