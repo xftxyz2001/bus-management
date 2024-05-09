@@ -5,13 +5,13 @@
 <mapper namespace="com.bus.management.mapper.DriverMapper">
 
     <resultMap id="BaseResultMap" type="com.bus.management.domain.Driver">
-            <id property="driverid" column="DriverID" jdbcType="INTEGER"/>
-            <result property="name" column="Name" jdbcType="VARCHAR"/>
-            <result property="age" column="Age" jdbcType="INTEGER"/>
-            <result property="gender" column="Gender" jdbcType="VARCHAR"/>
-            <result property="licensenumber" column="LicenseNumber" jdbcType="VARCHAR"/>
-            <result property="phone" column="Phone" jdbcType="VARCHAR"/>
-            <result property="worklocation" column="WorkLocation" jdbcType="VARCHAR"/>
+        <id property="driverid" column="DriverID" jdbcType="INTEGER"/>
+        <result property="name" column="Name" jdbcType="VARCHAR"/>
+        <result property="age" column="Age" jdbcType="INTEGER"/>
+        <result property="gender" column="Gender" jdbcType="VARCHAR"/>
+        <result property="licensenumber" column="LicenseNumber" jdbcType="VARCHAR"/>
+        <result property="phone" column="Phone" jdbcType="VARCHAR"/>
+        <result property="worklocation" column="WorkLocation" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

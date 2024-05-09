@@ -5,15 +5,15 @@
 <mapper namespace="com.bus.management.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.bus.management.domain.User">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="username" column="username" jdbcType="VARCHAR"/>
-            <result property="age" column="age" jdbcType="TINYINT"/>
-            <result property="gender" column="gender" jdbcType="TINYINT"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
-            <result property="token" column="token" jdbcType="VARCHAR"/>
-            <result property="identify" column="identify" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="age" column="age" jdbcType="TINYINT"/>
+        <result property="gender" column="gender" jdbcType="TINYINT"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+        <result property="identify" column="identify" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
