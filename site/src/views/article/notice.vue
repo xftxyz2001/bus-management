@@ -18,10 +18,10 @@
         </template>
 
         <el-table :data="filteredNotice" style="width: 100%">
-          <el-table-column prop="createTime" label="时间"></el-table-column>
+          <el-table-column prop="createtime" label="时间"></el-table-column>
           <el-table-column prop="title" label="标题"></el-table-column>
           <el-table-column prop="content" label="内容"></el-table-column>
-          <el-table-column prop="updateTime" label="修改时间"></el-table-column>
+          <el-table-column prop="updatetime" label="修改时间"></el-table-column>
 
           <el-table-column label="操作" width="100">
             <template #default="{ row }">

@@ -84,7 +84,7 @@ function switchShowReply(message) {
 function postMessage() {
   messageApi.addcontext(newMessage.value).then(() => {
     newMessage.value.content = "";
-    fetchMessages();
+    location.reload();
   });
 }
 
