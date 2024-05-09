@@ -42,11 +42,6 @@
       </el-button>
     </el-card>
 
-    <!-- <div>
-      <el-button type="danger" @click="logout" style="float: right;">退出登录</el-button>
-    </div> -->
-    <!-- <el-row style="text-align: left"> -->
-    <!-- </el-row> -->
   </div>
 </template>
 

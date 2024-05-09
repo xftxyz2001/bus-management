@@ -14,9 +14,9 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { ref } from "vue";
 import request from "@/utils/request.js";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const email = ref("");
 const message = ref("");

@@ -1,67 +1,3 @@
-<script setup>
-import { ElMessage, ElSelect, ElOption } from "element-plus";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import userApi from "@/api/userApi";
-
-const router = useRouter();
-
-const isRegister = ref(false);
-//定义数据模型
-const registerData = ref({
-  username: "",
-  password: "",
-  rePassword: "",
-  age: "",
-  gender: "",
-  phone: ""
-});
-
-const ageOptions = Array.from({ length: 101 }, (_, i) => i);
-
-const genderOptions = ref([
-  { label: "女", value: 0 },
-  { label: "男", value: 1 }
-]);
-
-//校验密码的函数
-function checkRePassword(rule, value, callback) {
-  if (value === "") {
-    callback(new Error("请再次确认密码"));
-  } else if (value !== registerData.value.password) {
-    callback(new Error("请确保两次输入的密码一样"));
-  } else {
-    callback();
-  }
-}
-
-function register() {
-  userApi.register(registerData.value).then(res => {
-    ElMessage.success("注册成功");
-    isRegister.value = false;
-  });
-}
-
-function login() {
-  userApi.login(registerData.value).then(res => {
-    ElMessage.success("登录成功");
-    router.push("/main");
-  });
-}
-
-function gotoforgerPassword() {
-  router.push("/forget");
-}
-
-function clearRegisterData() {
-  registerData.value = {
-    username: "",
-    password: "",
-    rePassword: ""
-  };
-}
-</script>
-
 <template>
   <!-- 注册表单  -->
   <div class="login-box">
@@ -170,6 +106,70 @@ function clearRegisterData() {
     </el-form>
   </div>
 </template>
+
+<script setup>
+import userApi from "@/api/userApi";
+import { ElMessage, ElOption, ElSelect } from "element-plus";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const isRegister = ref(false);
+//定义数据模型
+const registerData = ref({
+  username: "",
+  password: "",
+  rePassword: "",
+  age: "",
+  gender: "",
+  phone: ""
+});
+
+const ageOptions = Array.from({ length: 101 }, (_, i) => i);
+
+const genderOptions = ref([
+  { label: "女", value: 0 },
+  { label: "男", value: 1 }
+]);
+
+//校验密码的函数
+function checkRePassword(rule, value, callback) {
+  if (value === "") {
+    callback(new Error("请再次确认密码"));
+  } else if (value !== registerData.value.password) {
+    callback(new Error("请确保两次输入的密码一样"));
+  } else {
+    callback();
+  }
+}
+
+function register() {
+  userApi.register(registerData.value).then(res => {
+    ElMessage.success("注册成功");
+    isRegister.value = false;
+  });
+}
+
+function login() {
+  userApi.login(registerData.value).then(res => {
+    ElMessage.success("登录成功");
+    router.push("/main");
+  });
+}
+
+function gotoforgerPassword() {
+  router.push("/forget");
+}
+
+function clearRegisterData() {
+  registerData.value = {
+    username: "",
+    password: "",
+    rePassword: ""
+  };
+}
+</script>
 
 <style>
 body {

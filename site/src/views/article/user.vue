@@ -1,102 +1,3 @@
-<script setup>
-import { Edit, Delete } from "@element-plus/icons-vue";
-import { ref } from "vue";
-import request from "@/utils/request";
-
-import userApi from "@/api/userApi";
-import { ElMessage } from "element-plus";
-
-const Page = ref(1);
-const limit = ref(10);
-const total = ref(0);
-const small = ref(false);
-const background = ref(false);
-const disabled = ref(false);
-const genderData = ref([{ gender: 1 }, { gender: 0 }]);
-
-const userDatas = ref([]);
-
-function getData() {
-  userApi.getAllusers().then(res => {
-    userDatas.value = res.data;
-  });
-}
-getData();
-
-function handleDelete(row) {
-  userApi.deleteUser(row.id).then(res => {
-    ElMessage.success("删除成功");
-    getData();
-  });
-}
-
-function handleSizeChange(val) {
-  this.Page = val;
-}
-function handleCurrentChange(val) {
-  limit.value = val;
-}
-
-// 新增/编辑弹窗数据
-const dialogVisible = ref(false);
-const dialogTitle = ref("");
-
-const editUser = ref({
-  id: "",
-  username: "",
-  age: "",
-  gender: "",
-  phone: ""
-});
-
-function addUser() {
-  request({
-    url: "/user/add",
-    method: "post",
-    data: editUser.value
-  }).then(res => {
-    getData();
-  });
-}
-
-function updateUser() {
-  request({
-    url: "/user/update",
-    method: "put",
-    data: editUser.value
-  }).then(res => {
-    getData();
-  });
-}
-
-function showUpdateDialog(row) {
-  dialogVisible.value = true;
-  dialogTitle.value = "编辑用户信息";
-  editUser.value = { ...row };
-}
-
-function showAddDialog() {
-  dialogVisible.value = true;
-  dialogTitle.value = "新增用户信息";
-  editUser.value = {
-    id: "",
-    username: "",
-    age: "",
-    gender: "",
-    phone: ""
-  };
-}
-
-function addOrUpdateUser() {
-  if (dialogTitle.value === "新增用户信息") {
-    addUser();
-  } else {
-    updateUser();
-  }
-  dialogVisible.value = false;
-}
-</script>
-
 <template>
   <el-card class="page-container">
     <template #header>
@@ -173,6 +74,106 @@ function addOrUpdateUser() {
     </div>
   </el-dialog>
 </template>
+
+<script setup>
+import request from "@/utils/request";
+import { Delete, Edit } from "@element-plus/icons-vue";
+import { ref } from "vue";
+
+import userApi from "@/api/userApi";
+import { ElMessage } from "element-plus";
+
+const Page = ref(1);
+const limit = ref(10);
+const total = ref(0);
+const small = ref(false);
+const background = ref(false);
+const disabled = ref(false);
+const genderData = ref([{ gender: 1 }, { gender: 0 }]);
+
+const userDatas = ref([]);
+
+function getData() {
+  userApi.getAll().then(res => {
+    userDatas.value = res.data;
+  });
+}
+getData();
+
+function handleDelete(row) {
+  userApi.deleteUser(row.id).then(res => {
+    ElMessage.success("删除成功");
+    getData();
+  });
+}
+
+function handleSizeChange(val) {
+  Page.value = val;
+}
+function handleCurrentChange(val) {
+  limit.value = val;
+}
+
+// 新增/编辑弹窗数据
+const dialogVisible = ref(false);
+const dialogTitle = ref("");
+
+const editUser = ref({
+  id: "",
+  username: "",
+  age: "",
+  gender: "",
+  phone: ""
+});
+
+function addUser() {
+  request({
+    url: "/user/add",
+    method: "post",
+    data: editUser.value
+  }).then(res => {
+    getData();
+  });
+}
+
+function updateUser() {
+  request({
+    url: "/user/update",
+    method: "put",
+    data: editUser.value
+  }).then(res => {
+    getData();
+  });
+}
+
+function showUpdateDialog(row) {
+  dialogVisible.value = true;
+  dialogTitle.value = "编辑用户信息";
+  editUser.value = { ...row };
+}
+
+function showAddDialog() {
+  dialogVisible.value = true;
+  dialogTitle.value = "新增用户信息";
+  editUser.value = {
+    id: "",
+    username: "",
+    age: "",
+    gender: "",
+    phone: ""
+  };
+}
+
+function addOrUpdateUser() {
+  if (dialogTitle.value === "新增用户信息") {
+    addUser();
+  } else {
+    updateUser();
+  }
+  dialogVisible.value = false;
+}
+</script>
+
 <style lang="scss" scoped>
 .el-p {
   margin-top: 20px;

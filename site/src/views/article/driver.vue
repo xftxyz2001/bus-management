@@ -65,8 +65,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import request from "@/utils/request.js";
+import { ref } from "vue";
 
 const searchQuery = ref("");
 const drivers = ref([]);

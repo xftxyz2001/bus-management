@@ -1,168 +1,3 @@
-<script>
-import { ref } from "vue";
-import request from "@/utils/request.js";
-import { ElMessage } from "element-plus";
-
-const currentNotice1 = ref({
-  createTime: "",
-  title: "",
-  content: "",
-  updateTime: ""
-});
-export default {
-  name: "NoticeBoard",
-  setup() {
-    //const currentNotice = ref('');
-    const newTitle = ref(""); // 新公告标题
-    const newNotice = ref("");
-    const editDialogVisible = ref(false);
-    const editedNotice = ref({ id: null, title: "", content: "" });
-
-    const currentNotice = ref([]); // 存放当前公告列表
-    const addDialogVisible = ref(false); // 控制新增公告对话框的显示状态
-    const newNoticeForm = ref({ title: "", content: "" }); // 存放新增公告表单的数据
-
-    const filteredNotice = ref([]);
-    const searchKeyword = ref("");
-
-    // 从后端获取公告信息
-    const fetchNotice = () => {
-      request({
-        url: "/board/getAllboard",
-        method: "get"
-      })
-        .then(res => {
-          currentNotice.value = res.data;
-          filteredNotice.value = res.data;
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    };
-
-    //模糊搜索
-    const searchNotice = () => {
-      // 根据搜索关键字过滤公告列表
-      filteredNotice.value = currentNotice.value.filter(
-        notice => notice.title.includes(searchKeyword.value) || notice.content.includes(searchKeyword.value)
-      );
-    };
-
-    // 增加公告
-
-    const openAddDialog = () => {
-      console.log("打开新增公告对话框");
-      addDialogVisible.value = true;
-      console.log(addDialogVisible.value);
-    };
-
-    // 清空新增公告表单
-    const clearAddForm = () => {
-      newNoticeForm.value = { title: "", content: "" };
-    };
-
-    const addNotice = () => {
-      request({
-        url: "/board/declare",
-        method: "post",
-        data: {
-          title: newNoticeForm.value.title,
-          content: newNoticeForm.value.content
-        }
-      })
-        .then(res => {
-          console.log(res);
-          if (res.data) {
-            fetchNotice();
-            clearAddForm();
-            addDialogVisible.value = false;
-            ElMessage.success("添加成功");
-            console.log("公告添加成功");
-          } else {
-            console.error("Failed to add board:", res.data.error);
-            console.log("公告添加失败");
-          }
-        })
-        .catch(err => {
-          console.error("Error adding board:", err);
-          console.log("公告添加失败");
-        });
-    };
-
-    //删除公告
-    function deleteNotice(row) {
-      request.delete("/board/delete/" + id).then(res => {
-        ElMessage.success("删除成功");
-        fetchNotice();
-      });
-    }
-
-    const showEditDialog = row => {
-      editedNotice.value = {
-        id: row.id,
-        title: row.title,
-        content: row.content
-      };
-      editDialogVisible.value = true;
-    };
-
-    const cancelEdit = () => {
-      editDialogVisible.value = false;
-    };
-
-    const updateNotice = () => {
-      request({
-        url: "/board/revise",
-        method: "post",
-        data: {
-          id: editedNotice.value.id,
-          title: editedNotice.value.title,
-          content: editedNotice.value.content
-        }
-      })
-        .then(res => {
-          if (res.data) {
-            fetchNotice();
-            editDialogVisible.value = false;
-            ElMessage.success("修改成功");
-            console.log("公告修改成功");
-          } else {
-            console.error("Failed to update board:", res.data.error);
-            console.log("公告修改失败");
-          }
-        })
-        .catch(err => {
-          console.error("Error updating board:", err);
-          console.log("公告修改失败");
-        });
-    };
-
-    // 页面加载时获取公告信息
-    fetchNotice();
-
-    return {
-      filteredNotice,
-      searchKeyword,
-      searchNotice,
-      addDialogVisible,
-      newNoticeForm,
-      openAddDialog,
-      clearAddForm,
-      currentNotice,
-      newTitle,
-      newNotice,
-      editDialogVisible,
-      editedNotice,
-      addNotice,
-      deleteNotice,
-      showEditDialog,
-      cancelEdit,
-      updateNotice
-    };
-  }
-};
-</script>
-
 <template>
   <div style="display: flex; justify-content: space-between; align-items: center">
     <h1>公告栏</h1>
@@ -230,6 +65,146 @@ export default {
     </span>
   </el-dialog>
 </template>
+
+<script setup>
+import request from "@/utils/request.js";
+import { ElMessage } from "element-plus";
+import { ref } from "vue";
+
+const currentNotice1 = ref({
+  createTime: "",
+  title: "",
+  content: "",
+  updateTime: ""
+});
+
+const newTitle = ref(""); // 新公告标题
+const newNotice = ref("");
+const editDialogVisible = ref(false);
+const editedNotice = ref({ id: null, title: "", content: "" });
+
+const currentNotice = ref([]); // 存放当前公告列表
+const addDialogVisible = ref(false); // 控制新增公告对话框的显示状态
+const newNoticeForm = ref({ title: "", content: "" }); // 存放新增公告表单的数据
+
+const filteredNotice = ref([]);
+const searchKeyword = ref("");
+
+// 从后端获取公告信息
+function fetchNotice() {
+  request({
+    url: "/board/getAllboard",
+    method: "get"
+  })
+    .then(res => {
+      currentNotice.value = res.data;
+      filteredNotice.value = res.data;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+//模糊搜索
+function searchNotice() {
+  // 根据搜索关键字过滤公告列表
+  filteredNotice.value = currentNotice.value.filter(
+    notice => notice.title.includes(searchKeyword.value) || notice.content.includes(searchKeyword.value)
+  );
+}
+
+// 增加公告
+
+function openAddDialog() {
+  console.log("打开新增公告对话框");
+  addDialogVisible.value = true;
+  console.log(addDialogVisible.value);
+}
+
+// 清空新增公告表单
+function clearAddForm() {
+  newNoticeForm.value = { title: "", content: "" };
+}
+
+function addNotice() {
+  request({
+    url: "/board/declare",
+    method: "post",
+    data: {
+      title: newNoticeForm.value.title,
+      content: newNoticeForm.value.content
+    }
+  })
+    .then(res => {
+      console.log(res);
+      if (res.data) {
+        fetchNotice();
+        clearAddForm();
+        addDialogVisible.value = false;
+        ElMessage.success("添加成功");
+        console.log("公告添加成功");
+      } else {
+        console.error("Failed to add board:", res.data.error);
+        console.log("公告添加失败");
+      }
+    })
+    .catch(err => {
+      console.error("Error adding board:", err);
+      console.log("公告添加失败");
+    });
+}
+
+//删除公告
+function deleteNotice(row) {
+  request.delete("/board/delete/" + id).then(res => {
+    ElMessage.success("删除成功");
+    fetchNotice();
+  });
+}
+
+function showEditDialog(row) {
+  editedNotice.value = {
+    id: row.id,
+    title: row.title,
+    content: row.content
+  };
+  editDialogVisible.value = true;
+}
+
+function cancelEdit() {
+  editDialogVisible.value = false;
+}
+
+function updateNotice() {
+  request({
+    url: "/board/revise",
+    method: "post",
+    data: {
+      id: editedNotice.value.id,
+      title: editedNotice.value.title,
+      content: editedNotice.value.content
+    }
+  })
+    .then(res => {
+      if (res.data) {
+        fetchNotice();
+        editDialogVisible.value = false;
+        ElMessage.success("修改成功");
+        console.log("公告修改成功");
+      } else {
+        console.error("Failed to update board:", res.data.error);
+        console.log("公告修改失败");
+      }
+    })
+    .catch(err => {
+      console.error("Error updating board:", err);
+      console.log("公告修改失败");
+    });
+}
+
+// 页面加载时获取公告信息
+fetchNotice();
+</script>
 
 <style scoped>
 /* 在这里可以添加一些局部样式 */

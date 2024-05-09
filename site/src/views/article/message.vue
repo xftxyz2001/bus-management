@@ -54,9 +54,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { ElContainer, ElHeader, ElMain, ElInput, ElButton, ElCard, dividerProps } from "element-plus";
 import request from "@/utils/request";
+import { ElButton, ElCard, ElContainer, ElHeader, ElInput, ElMain } from "element-plus";
+import { ref } from "vue";
 
 const newMessage = ref({
   content: ""
