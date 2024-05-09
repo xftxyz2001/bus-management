@@ -4,7 +4,7 @@
     <el-container style="height: 94%">
       <!-- default-active设置进入页面时默认打开的菜单条目路由（这里的/indexpage是首页菜单条目的路由）；:router设置为真，打开路由；:collapse这里联合折叠图标实现菜单折叠与展开 -->
       <el-menu
-        default-active="/main/indexpage"
+        default-active="/main/index"
         :router="true"
         :collapse="isCollapse"
         background-color="#545c64"
