@@ -26,6 +26,7 @@
     </el-container>
   </div>
   <el-footer class="bottitle">公交车信息管理系统 ©2024 Created by 段朝辉</el-footer>
+  <el-backtop :right="100" :bottom="100" />
 </template>
 
 <script setup>

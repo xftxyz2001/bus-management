@@ -6,7 +6,7 @@ import ForgetPasswordVue from "@/views/ForgetPassword.vue";
 
 import LayoutVue from "@/views/layout.vue";
 
-import IndexVue from "@/views/article/inedx.vue";
+import IndexVue from "@/views/article/index.vue";
 import PersonalVue from "@/views/article/personal.vue";
 import NoticeVue from "@/views/article/notice.vue";
 import BusInfoVue from "@/views/article/businfo.vue";

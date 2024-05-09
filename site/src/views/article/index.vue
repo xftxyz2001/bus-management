@@ -32,7 +32,7 @@ request.get("/user/role").then(res => {
 <style scoped>
 .box {
   text-align: center;
-  height: 100%;
+  height: 90%;
   padding: 20px 0 0 0;
   margin: 0px;
 }
