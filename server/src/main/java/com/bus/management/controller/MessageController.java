@@ -43,7 +43,7 @@ public class MessageController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public Result<String> deleteMessage(@PathVariable int id) {
+    public Result<String> deleteMessage(@PathVariable("id") Integer id) {
         messageService.removeById(id);
         return Result.success("删除成功");
     }
@@ -57,7 +57,7 @@ public class MessageController {
     }
 
     @GetMapping("/getReply")
-    public Result<?> getReply(@RequestParam Integer id) {
+    public Result<?> getReply(@RequestParam("id") Integer id) {
         List<Messages> messages = messageService.list(Wrappers.<Messages>lambdaQuery().eq(Messages::getReply, id));
         messages.sort((o1, o2) -> Math.toIntExact(o2.getId() - o1.getId()));
         return Result.success(messages);

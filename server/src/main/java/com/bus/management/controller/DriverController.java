@@ -32,13 +32,13 @@ public class DriverController {
     }
 
     @GetMapping("/{id}")
-    public Result<?> getDriverById(@PathVariable int id) {
+    public Result<?> getDriverById(@PathVariable("id") Integer id) {
         Driver driver = driverService.getById(id);
         return Result.success(driver);
     }
 
     @GetMapping("/getByDriverName")
-    public Result<?> getByDriverName(String driverName) {
+    public Result<?> getByDriverName(@RequestParam("driverName") String driverName) {
         List<Driver> drivers = driverService.list(Wrappers.<Driver>lambdaQuery().like(Driver::getName, driverName));
         return Result.success(drivers);
     }
@@ -50,7 +50,7 @@ public class DriverController {
     }
 
     @DeleteMapping("/{id}")
-    public Result<?> deleteDriver(@PathVariable int id) {
+    public Result<?> deleteDriver(@PathVariable("id") Integer id) {
         driverService.removeById(id);
         return Result.success("删除成功");
     }

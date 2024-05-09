@@ -42,7 +42,7 @@ public class BusLineController {
     }
 
     @GetMapping("/getByBusid")
-    public Result<?> getByBusid(String busid) {
+    public Result<?> getByBusid(@RequestParam("busid") Integer busid) {
         Busline bus = buslineService.getOne(Wrappers.<Busline>lambdaQuery().eq(Busline::getBusid, busid));
         return Result.success(bus);
     }
@@ -54,7 +54,7 @@ public class BusLineController {
     }
 
     @DeleteMapping("/delete")
-    public Result<?> delete(String id) {
+    public Result<?> delete(@RequestParam("id") Integer id) {
         buslineService.removeById(id);
         return Result.success();
     }

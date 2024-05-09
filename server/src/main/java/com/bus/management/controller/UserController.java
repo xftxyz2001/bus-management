@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bus.management.config.Env;
 import com.bus.management.domain.User;
 import com.bus.management.result.Result;
-import com.bus.management.service.EmailService;
 import com.bus.management.service.UserService;
 import com.bus.management.utils.JwtUtil;
 import com.bus.management.utils.Md5Util;
-import jakarta.validation.constraints.Pattern;
+import com.bus.management.vo.req.LoginReq;
+import com.bus.management.vo.req.RegisterReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -30,9 +30,6 @@ public class UserController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private EmailService emailService;
-
     @PostMapping("/add")
     public Result<?> add(@RequestBody User user) {
         User u = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
@@ -46,38 +43,35 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public Result<?> register(@Pattern(regexp = "^\\S{3,16}$") String username,
-                              @Pattern(regexp = "^\\S{5,16}$") String password,
-                              @RequestParam int age, @RequestParam int gender,
-                              @RequestParam String phone) {
+    public Result<?> register(@RequestBody RegisterReq req) {
 
-        User u = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+        User u = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, req.getUsername()));
 
         if (u != null) {
             return Result.error("用户名已经被占用");
         }
         u = new User();
-        u.setUsername(username);
-        u.setPassword(Md5Util.getMD5String(password));
-        u.setAge(age);
-        u.setGender(gender);
-        u.setPhone(phone);
+        u.setUsername(req.getUsername());
+        u.setPassword(Md5Util.getMD5String(req.getPassword()));
+        u.setAge(req.getAge());
+        u.setGender(req.getGender());
+        u.setPhone(req.getPhone());
         u.setIdentify(User.ROLE_USER);
         userService.save(u);
         return Result.success();
     }
 
     @PostMapping("/login")
-    public Result<?> login(@Pattern(regexp = "^\\S{3,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<?> login(@RequestBody LoginReq req) {
         //根据用户名查询用户
-        User loginUser = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+        User loginUser = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, req.getUsername()));
         //判断该用户是否存在
         if (loginUser == null) {
             return Result.error("用户名错误");
         }
 
         //判断密码是否正确  loginUser对象中的password是密文
-        if (!Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
+        if (!Md5Util.getMD5String(req.getPassword()).equals(loginUser.getPassword())) {
             return Result.error("密码错误");
         }
         //登录成功
@@ -86,7 +80,7 @@ public class UserController {
         ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
         operations.set(token, token, JwtUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
         // userService.updateToken(username, token);
-        userService.update(Wrappers.<User>lambdaUpdate().eq(User::getUsername, username).set(User::getToken, token));
+        userService.update(Wrappers.<User>lambdaUpdate().eq(User::getUsername, req.getUsername()).set(User::getToken, token));
         return Result.success(token);
     }
 
@@ -159,7 +153,7 @@ public class UserController {
     }
 
     @PostMapping("/forget")
-    public Result<?> frogetPassword(@RequestParam String email) {
+    public Result<?> frogetPassword(@RequestParam("email") String email) {
         userService.frogetPassword(email);
         return Result.success("重置密码邮件已发送至您的邮箱。");
     }
