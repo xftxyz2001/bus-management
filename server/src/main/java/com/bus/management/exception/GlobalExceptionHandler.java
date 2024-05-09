@@ -1,6 +1,6 @@
 package com.bus.management.exception;
 
-import com.bus.management.pojo.Result;
+import com.bus.management.result.Result;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

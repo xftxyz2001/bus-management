@@ -2,7 +2,7 @@ package com.bus.management.interceptors;
 
 
 import com.bus.management.config.Env;
-import com.bus.management.pojo.Result;
+import com.bus.management.result.Result;
 import com.bus.management.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

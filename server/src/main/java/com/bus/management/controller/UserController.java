@@ -1,7 +1,7 @@
 package com.bus.management.controller;
 
 import com.bus.management.config.Env;
-import com.bus.management.pojo.Result;
+import com.bus.management.result.Result;
 import com.bus.management.pojo.User;
 import com.bus.management.service.EmailService;
 import com.bus.management.service.UserService;
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<String> login(@Pattern(regexp = "^\\S{3,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
+    public Result<?> login(@Pattern(regexp = "^\\S{3,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
         //根据用户名查询用户
         User loginUser = userService.findByUserName(username);
         //判断该用户是否存在

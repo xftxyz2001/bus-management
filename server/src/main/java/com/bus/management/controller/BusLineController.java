@@ -1,7 +1,7 @@
 package com.bus.management.controller;
 
 import com.bus.management.pojo.BusLine;
-import com.bus.management.pojo.Result;
+import com.bus.management.result.Result;
 import com.bus.management.service.BusLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
