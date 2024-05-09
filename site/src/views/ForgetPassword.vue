@@ -16,29 +16,27 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { ref } from "vue";
-import axios from "axios";
+import request from "@/utils/request.js";
 
 const email = ref("");
 const message = ref("");
 const router = useRouter();
 
-const back = () => {
+function back() {
   router.push("/login");
-};
+}
 
-const submitEmail = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:8080/user/forget",
-      { email: email.value },
-      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-    );
-    message.value = "如果您的电子邮件存在于我们的数据库中，一封重置邮件已发送到您的邮箱。";
-  } catch (error) {
-    message.value = "发送邮件失败，请稍后重试。";
-    console.error("Error:", error);
-  }
-};
+function submitEmail() {
+  request
+    .post("/user/forget", { email: email.value })
+    .then(() => {
+      message.value = "如果您的电子邮件存在于我们的数据库中，一封重置邮件已发送到您的邮箱。";
+    })
+    .catch(error => {
+      message.value = "发送邮件失败，请稍后重试。";
+      console.error("Error:", error);
+    });
+}
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
 import { ElMessage, ElSelect, ElOption } from "element-plus";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { userRegisterService, userLoginService } from "../api/user.js";
+import userApi from "@/api/userApi";
 
 const router = useRouter();
 
@@ -25,7 +25,7 @@ const genderOptions = ref([
 ]);
 
 //校验密码的函数
-const checkRePassword = (rule, value, callback) => {
+function checkRePassword(rule, value, callback) {
   if (value === "") {
     callback(new Error("请再次确认密码"));
   } else if (value !== registerData.value.password) {
@@ -33,34 +33,33 @@ const checkRePassword = (rule, value, callback) => {
   } else {
     callback();
   }
-};
+}
 
-const register = async () => {
-  let result = await userRegisterService(registerData.value);
+function register() {
+  userApi.register(registerData.value).then(res => {
+    ElMessage.success("注册成功");
+    isRegister.value = false;
+  });
+}
 
-  ElMessage.success(result.msg ? result.msg : "注册成功");
-  isRegister.value = false;
-};
+function login() {
+  userApi.login(registerData.value).then(res => {
+    ElMessage.success("登录成功");
+    router.push("/main");
+  });
+}
 
-const login = async () => {
-  let result = await userLoginService(registerData.value);
-
-  ElMessage.success(result.msg ? result.msg : "登录成功");
-
-  router.push("/main");
-};
-
-const gotoforgerPassword = () => {
+function gotoforgerPassword() {
   router.push("/forget");
-};
+}
 
-const clearRegisterData = () => {
+function clearRegisterData() {
   registerData.value = {
     username: "",
     password: "",
     rePassword: ""
   };
-};
+}
 </script>
 
 <template>
@@ -128,7 +127,7 @@ const clearRegisterData = () => {
         </el-button>
       </div>
     </el-form>
-    
+
     <el-form ref="form" size="large" autocomplete="off" v-if="!isRegister" :model="registerData" :rules="rules">
       <el-form-item>
         <h2>公交车信息管理登录系统</h2>
@@ -170,7 +169,6 @@ const clearRegisterData = () => {
       </div>
     </el-form>
   </div>
-
 </template>
 
 <style>

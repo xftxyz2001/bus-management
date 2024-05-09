@@ -1,8 +1,6 @@
 <script>
-import { Edit, Delete } from "@element-plus/icons-vue";
 import { ref } from "vue";
 import request from "@/utils/request.js";
-import { deleteBoard } from "@/api/user.js";
 import { ElMessage } from "element-plus";
 
 const currentNotice1 = ref({
@@ -93,7 +91,7 @@ export default {
 
     //删除公告
     function deleteNotice(row) {
-      deleteBoard(row.id).then(res => {
+      request.delete("/board/delete/" + id).then(res => {
         ElMessage.success("删除成功");
         fetchNotice();
       });

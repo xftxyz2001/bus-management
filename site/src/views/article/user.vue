@@ -1,9 +1,9 @@
 <script setup>
 import { Edit, Delete } from "@element-plus/icons-vue";
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import request from "@/utils/request";
 
-import { getAllusers, deleteUser } from "@/api/user.js";
+import userApi from "@/api/userApi";
 import { ElMessage } from "element-plus";
 
 const Page = ref(1);
@@ -15,15 +15,16 @@ const disabled = ref(false);
 const genderData = ref([{ gender: 1 }, { gender: 0 }]);
 
 const userDatas = ref([]);
-const getData = async () => {
-  let res = await getAllusers();
-  userDatas.value = res.data;
-  console.log(userDatas.value);
-};
+
+function getData() {
+  userApi.getAllusers().then(res => {
+    userDatas.value = res.data;
+  });
+}
 getData();
 
 function handleDelete(row) {
-  deleteUser(row.id).then(res => {
+  userApi.deleteUser(row.id).then(res => {
     ElMessage.success("删除成功");
     getData();
   });
