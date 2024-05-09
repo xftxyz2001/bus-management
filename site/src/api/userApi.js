@@ -28,7 +28,7 @@ export default {
   updatePwd(data) {
     return request.patch("/user/updatePwd", data);
   },
-  frogetPassword(data) {
+  forgetPassword(data) {
     return request.post("/user/forget", data);
   },
   getRole(id) {

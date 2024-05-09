@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request.js";
+import userApi from "@/api/userApi";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -27,8 +27,8 @@ function back() {
 }
 
 function submitEmail() {
-  request
-    .post("/user/forget", { email: email.value })
+  userApi
+    .forgetPassword({ email: email.value })
     .then(() => {
       message.value = "如果您的电子邮件存在于我们的数据库中，一封重置邮件已发送到您的邮箱。";
     })

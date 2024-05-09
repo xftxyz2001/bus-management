@@ -9,5 +9,5 @@ import com.bus.management.domain.User;
  */
 public interface UserService extends IService<User> {
 
-    void frogetPassword(String email);
+    void forgetPassword(String email);
 }

@@ -24,7 +24,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private final EmailService emailService;
 
     @Override
-    public void frogetPassword(String email) {
+    public void forgetPassword(String email) {
         User user = baseMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getEmail, email));
         if (user != null) {
             String newPassword = UUID.randomUUID().toString().substring(0, 8);

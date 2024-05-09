@@ -7,6 +7,7 @@ import com.bus.management.result.Result;
 import com.bus.management.service.UserService;
 import com.bus.management.utils.JwtUtil;
 import com.bus.management.utils.Md5Util;
+import com.bus.management.vo.req.ForgetPasswordReq;
 import com.bus.management.vo.req.LoginReq;
 import com.bus.management.vo.req.RegisterReq;
 import lombok.RequiredArgsConstructor;
@@ -152,8 +153,8 @@ public class UserController {
     }
 
     @PostMapping("/forget")
-    public Result<?> frogetPassword(@RequestParam("email") String email) {
-        userService.frogetPassword(email);
+    public Result<?> forgetPassword(@RequestBody ForgetPasswordReq req) {
+        userService.forgetPassword(req.getEmail());
         return Result.success("重置密码邮件已发送至您的邮箱。");
     }
 
