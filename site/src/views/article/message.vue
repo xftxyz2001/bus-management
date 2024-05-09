@@ -84,7 +84,7 @@ function switchShowReply(message) {
 function postMessage() {
   request.post("/message/sayliuyan", newMessage.value).then(() => {
     newMessage.value.content = "";
-    fetchMessages();
+    location.reload();
   });
 }
 

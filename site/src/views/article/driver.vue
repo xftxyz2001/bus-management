@@ -20,9 +20,9 @@
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="gender" label="性别"></el-table-column>
-      <el-table-column prop="licenseNumber" label="驾驶证号"></el-table-column>
+      <el-table-column prop="licensenumber" label="驾驶证号"></el-table-column>
       <el-table-column prop="phone" label="电话号码"></el-table-column>
-      <el-table-column prop="workLocation" label="工作区间"></el-table-column>
+      <el-table-column prop="worklocation" label="工作区间"></el-table-column>
       <el-table-column label="操作">
         <template #default="{ row }">
           <el-button size="mini" type="primary" @click="handleEdit(row)">修改</el-button>
@@ -47,14 +47,14 @@
           <el-radio label="女">女</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="驾驶证号" prop="licenseNumber">
-        <el-input v-model="newDriver.licenseNumber" />
+      <el-form-item label="驾驶证号" prop="licensenumber">
+        <el-input v-model="newDriver.licensenumber" />
       </el-form-item>
       <el-form-item label="电话号码" prop="phone">
         <el-input v-model="newDriver.phone" />
       </el-form-item>
-      <el-form-item label="工作区间" prop="workLocation">
-        <el-input v-model="newDriver.workLocation" />
+      <el-form-item label="工作区间" prop="worklocation">
+        <el-input v-model="newDriver.worklocation" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -105,7 +105,7 @@ function resetSearch() {
 // 删除司机
 function handleDelete(driver) {
   request
-    .delete(`/driver/${driver.driverID}`)
+    .delete(`/driver/${driver.driverid}`)
     .then(() => {
       fetchDrivers();
     })
@@ -141,26 +141,26 @@ function updateDriver() {
 const dialogVisible = ref(false);
 const dialogTitle = ref("");
 const newDriver = ref({
-  driverID: "",
+  driverid: "",
   name: "",
   age: "",
   gender: "",
-  licenseNumber: "",
+  licensenumber: "",
   phone: "",
-  workLocation: ""
+  worklocation: ""
 });
 
 function handleAdd() {
   dialogVisible.value = true;
   dialogTitle.value = "添加司机";
   newDriver.value = {
-    driverID: "",
+    driverid: "",
     name: "",
     age: "",
     gender: "",
-    licenseNumber: "",
+    licensenumber: "",
     phone: "",
-    workLocation: ""
+    worklocation: ""
   };
 }
 

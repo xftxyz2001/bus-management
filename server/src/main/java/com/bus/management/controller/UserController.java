@@ -8,7 +8,6 @@ import com.bus.management.service.EmailService;
 import com.bus.management.service.UserService;
 import com.bus.management.utils.JwtUtil;
 import com.bus.management.utils.Md5Util;
-import com.bus.management.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
