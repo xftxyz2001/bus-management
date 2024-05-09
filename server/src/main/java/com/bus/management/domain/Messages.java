@@ -49,7 +49,7 @@ public class Messages implements Serializable {
      * 回复内容
      */
     @TableField(value = "reply")
-    private String reply;
+    private Long reply;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

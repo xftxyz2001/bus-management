@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.management.mapper.BuslineMapper">
+
+    <resultMap id="BaseResultMap" type="com.bus.management.domain.Busline">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="city" column="city" jdbcType="VARCHAR"/>
+            <result property="startstation" column="startstation" jdbcType="VARCHAR"/>
+            <result property="endstation" column="endstation" jdbcType="VARCHAR"/>
+            <result property="routesite" column="routesite" jdbcType="VARCHAR"/>
+            <result property="busid" column="busid" jdbcType="VARCHAR"/>
+            <result property="runtime" column="runtime" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,city,startstation,
+        endstation,routesite,busid,
+        runtime,price
+    </sql>
+</mapper>

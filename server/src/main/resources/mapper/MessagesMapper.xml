@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bus.management.mapper.MessagesMapper">
+
+    <resultMap id="BaseResultMap" type="com.bus.management.domain.Messages">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="addtime" column="addtime" jdbcType="TIMESTAMP"/>
+            <result property="userid" column="userid" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="reply" column="reply" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,addtime,userid,
+        username,content,reply
+    </sql>
+</mapper>
