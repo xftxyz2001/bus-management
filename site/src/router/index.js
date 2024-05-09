@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import LoginAndRegisterVue from "@/views/LoginAndRegister.vue";
+import LogoutVue from "@/views/logout.vue";
 import ForgetPasswordVue from "@/views/ForgetPassword.vue";
 
 import LayoutVue from "@/views/layout.vue";
@@ -15,8 +16,9 @@ import BusSearchVue from "@/views/article/busSearch.vue";
 import MessageVue from "@/views/article/message.vue";
 
 const routes = [
-  { path: "/", redirect: "/login" },
+  { path: "/", redirect: "/main" },
   { path: "/login", component: LoginAndRegisterVue },
+  { path: "/logout", component: LogoutVue },
   { path: "/forget", component: ForgetPasswordVue },
   {
     path: "/main",
@@ -46,6 +48,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes: routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.path === "/login" || to.path === "/forget") {
+    next();
+  } else {
+    if (localStorage.getItem("token")) {
+      next();
+    } else {
+      next("/login");
+    }
+  }
 });
 
 export default router;
