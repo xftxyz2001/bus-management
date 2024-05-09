@@ -1,5 +1,4 @@
 import request from "@/utils/request.js";
-// import { pa } from 'element-plus/es/locale';
 
 export const userRegisterService = registerData => {
   const params = new URLSearchParams();

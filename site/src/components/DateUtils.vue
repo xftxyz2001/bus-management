@@ -1,8 +1,3 @@
-<!--
- * @Description: 
- * @Author: Rabbiter
- * @Date: 2023-03-04 15:31:03
--->
 <template>
   <div style="padding: 30px; font-size: 30px; color: orange">
     <span class="time" id="time">
@@ -54,8 +49,6 @@ export default {
         this.getIncrease(newtime.getDate(), 2) +
         "日 " +
         this.week[newtime.getDay()];
-      //this.hour=
-      // return `${this.time.hour}:${this.time.minitus}:${this.time.seconds}`;
     },
     getIncrease(num, digit) {
       var increase = "";

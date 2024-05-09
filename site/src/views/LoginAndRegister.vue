@@ -17,10 +17,8 @@ const registerData = ref({
   phone: ""
 });
 
-// const age = ref(null)
 const ageOptions = Array.from({ length: 101 }, (_, i) => i);
 
-// const gender = ref(null)
 const genderOptions = ref([
   { label: "女", value: 0 },
   { label: "男", value: 1 }
@@ -38,7 +36,6 @@ const checkRePassword = (rule, value, callback) => {
 };
 
 const register = async () => {
-  //registerData是一个响应式对象,如果要获取值,需要.value
   let result = await userRegisterService(registerData.value);
 
   ElMessage.success(result.msg ? result.msg : "注册成功");
@@ -54,7 +51,7 @@ const login = async () => {
 };
 
 const gotoforgerPassword = () => {
-  router.push("/forget"); // 确保已经在路由配置中定义了 '/forgot-password'
+  router.push("/forget");
 };
 
 const clearRegisterData = () => {
@@ -67,8 +64,6 @@ const clearRegisterData = () => {
 </script>
 
 <template>
-  <!-- <el-row> -->
-
   <!-- 注册表单  -->
   <div class="login-box">
     <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules">
@@ -94,10 +89,7 @@ const clearRegisterData = () => {
           v-model="registerData.rePassword"
         ></el-input>
       </el-form-item>
-      <!-- <el-form-item prop="rePassword" class="user-box">
-                <el-input :prefix-icon="Lock" type="password" placeholder="年龄"
-                    v-model="registerData.rePassword"></el-input>
-            </el-form-item> -->
+
       <el-form-item prop="age" class="user-box">
         <el-select v-model="registerData.age" placeholder="请选择年龄">
           <el-option v-for="ageOption in ageOptions" :key="ageOption" :label="ageOption" :value="ageOption"></el-option>
@@ -118,7 +110,8 @@ const clearRegisterData = () => {
           ></el-option>
         </el-select>
       </el-form-item>
-      <!-- //注册按钮  -->
+
+      <!-- 注册按钮  -->
       <br />
       <div class="jzw">
         <el-button class="button" type="primary" auto-insert-space @click="register">注册</el-button>
@@ -135,8 +128,7 @@ const clearRegisterData = () => {
         </el-button>
       </div>
     </el-form>
-    <!-- </div> -->
-    <!-- <div class="login-box">  -->
+    
     <el-form ref="form" size="large" autocomplete="off" v-if="!isRegister" :model="registerData" :rules="rules">
       <el-form-item>
         <h2>公交车信息管理登录系统</h2>
@@ -179,7 +171,6 @@ const clearRegisterData = () => {
     </el-form>
   </div>
 
-  <!-- </el-row> -->
 </template>
 
 <style>

@@ -2,8 +2,8 @@ package com.bus.management.controller;
 
 import com.bus.management.config.Env;
 import com.bus.management.pojo.Message;
-import com.bus.management.result.Result;
 import com.bus.management.pojo.User;
+import com.bus.management.result.Result;
 import com.bus.management.service.MessageService;
 import com.bus.management.service.UserService;
 import com.bus.management.utils.DateUtils;
