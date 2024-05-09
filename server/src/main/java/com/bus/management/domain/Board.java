@@ -15,36 +15,31 @@ import java.util.Date;
 @TableName(value = "board")
 @Data
 public class Board implements Serializable {
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
     /**
      *
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-
     /**
      *
      */
     @TableField(value = "title")
     private String title;
-
     /**
      *
      */
     @TableField(value = "content")
     private String content;
-
     /**
      *
      */
     @TableField(value = "createTime")
     private Date createtime;
-
     /**
      *
      */
     @TableField(value = "updateTime")
     private Date updatetime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

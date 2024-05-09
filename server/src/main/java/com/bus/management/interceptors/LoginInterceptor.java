@@ -7,7 +7,7 @@ import com.bus.management.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,12 +17,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class LoginInterceptor implements HandlerInterceptor {
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final StringRedisTemplate stringRedisTemplate;
+
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

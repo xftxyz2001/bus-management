@@ -7,11 +7,10 @@ public class JwtUtil {
 
     // 用户id
     public static final String X_USER_ID = "x-user-id";
-
-    // 密钥
-    private static final String SECRET_KEY = "bus-secret-key";
     // 过期时间
     public static final long EXPIRE_TIME = 60 * 60 * 1000;
+    // 密钥
+    private static final String SECRET_KEY = "bus-secret-key";
 
     // 生成token
     public static String generateToken(Integer userId) {

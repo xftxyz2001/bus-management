@@ -5,8 +5,7 @@ import com.bus.management.domain.Busline;
 import com.bus.management.result.Result;
 import com.bus.management.service.BuslineService;
 import com.bus.management.vo.req.BusSearchReq;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bus")
-@Validated
+@RequiredArgsConstructor
 public class BusLineController {
-    @Autowired
-    private BuslineService buslineService;
+    private final BuslineService buslineService;
 
     @PostMapping("/add")
     public Result<?> add(@RequestBody Busline bus) {

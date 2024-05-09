@@ -4,19 +4,18 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bus.management.domain.Driver;
 import com.bus.management.result.Result;
 import com.bus.management.service.DriverService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/driver")
-@Validated
+@RequiredArgsConstructor
 public class DriverController {
 
-    @Autowired
-    private DriverService driverService;
+
+    private final DriverService driverService;
 
     @GetMapping("/getAllDrivers")
     public Result<?> getAllDrivers() {

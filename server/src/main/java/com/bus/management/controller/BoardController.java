@@ -5,19 +5,16 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bus.management.domain.Board;
 import com.bus.management.result.Result;
 import com.bus.management.service.BoardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/board")
-@Validated
+@RequiredArgsConstructor
 public class BoardController {
-    @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
 
     @GetMapping("/getAllboard")
     public Result<?> getAllBoard() {

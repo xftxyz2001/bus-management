@@ -9,11 +9,10 @@ import com.bus.management.utils.JwtUtil;
 import com.bus.management.utils.Md5Util;
 import com.bus.management.vo.req.LoginReq;
 import com.bus.management.vo.req.RegisterReq;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +21,13 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/user")
-@Validated
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+
+    private final UserService userService;
+
+    private final StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("/add")
     public Result<?> add(@RequestBody User user) {

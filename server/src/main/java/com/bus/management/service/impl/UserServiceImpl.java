@@ -7,6 +7,7 @@ import com.bus.management.mapper.UserMapper;
 import com.bus.management.service.EmailService;
 import com.bus.management.service.UserService;
 import com.bus.management.utils.Md5Util;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -16,10 +17,11 @@ import java.util.UUID;
  * @createDate 2024-05-09 11:07:10
  */
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
 
-    private EmailService emailService;
+    private final EmailService emailService;
 
     @Override
     public void frogetPassword(String email) {

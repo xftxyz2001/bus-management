@@ -7,9 +7,8 @@ import com.bus.management.domain.User;
 import com.bus.management.result.Result;
 import com.bus.management.service.MessagesService;
 import com.bus.management.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -17,13 +16,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/message")
-@Validated
+@RequiredArgsConstructor
 public class MessageController {
-    @Autowired
-    private MessagesService messageService;
 
-    @Autowired
-    private UserService userService;
+    private final MessagesService messageService;
+
+
+    private final UserService userService;
 
     // 添加留言
     @PostMapping("/sayliuyan")
