@@ -11,7 +11,7 @@ import NoticeVue from "@/views/article/notice.vue";
 import BusInfoVue from "@/views/article/businfo.vue";
 import UserVue from "@/views/article/user.vue";
 import DriverVue from "@/views/article/driver.vue";
-import BusSearchVue from "@/views/article/bussearch.vue";
+import BusSearchVue from "@/views/article/busSearch.vue";
 import MessageVue from "@/views/article/message.vue";
 
 const routes = [
