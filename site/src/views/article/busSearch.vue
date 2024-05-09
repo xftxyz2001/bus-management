@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request";
+import busLineApi from "@/api/busLineApi";
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
 
@@ -50,7 +50,7 @@ function searchBuses() {
     ElMessage.warning("起始站点和目标站点不能相同");
     return;
   }
-  request.post("/bus/search", query.value).then(res => {
+  busLineApi.search(query.value).then(res => {
     buses.value = res.data;
   });
 }

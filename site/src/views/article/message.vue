@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request";
+import messageApi from "@/api/messageApi";
 import { ElButton, ElCard, ElContainer, ElHeader, ElInput, ElMain } from "element-plus";
 import { ref } from "vue";
 
@@ -64,7 +64,7 @@ const newMessage = ref({
 const messages = ref([]);
 
 function fetchMessages() {
-  request.get("/message/getAll").then(res => {
+  messageApi.getAllMessages().then(res => {
     messages.value = res.data;
   });
 }
@@ -74,7 +74,7 @@ function switchShowReply(message) {
   message.showReply = !message.showReply;
   if (message.showReply) {
     if (!message.replies) {
-      request.get(`/message/getReply?id=${message.id}`).then(res => {
+      messageApi.getReply(message.id).then(res => {
         message.replies = res.data;
       });
     }
@@ -82,23 +82,18 @@ function switchShowReply(message) {
 }
 
 function postMessage() {
-  request.post("/message/sayliuyan", newMessage.value).then(() => {
+  messageApi.addcontext(newMessage.value).then(() => {
     newMessage.value.content = "";
-    location.reload();
+    fetchMessages();
   });
 }
 
 function postReply(message) {
-  request
-    .post("/message/sayliuyan", {
-      reply: message.id,
-      content: message.newreply
-    })
-    .then(() => {
-      message.newreply = "";
-      request.get(`/message/getReply?id=${message.id}`).then(res => {
-        message.replies = res.data;
-      });
+  messageApi.addcontext({ reply: message.id, content: message.newreply }).then(() => {
+    message.newreply = "";
+    messageApi.getReply(message.id).then(res => {
+      message.replies = res.data;
     });
+  });
 }
 </script>

@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request";
+import busLineApi from "@/api/busLineApi";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { ref } from "vue";
 
@@ -84,42 +84,25 @@ const bus = ref({
 });
 
 function getBusData() {
-  request({
-    url: "/bus/getAll",
-    method: "get"
-  }).then(res => {
+  busLineApi.getAll().then(res => {
     busDatas.value = res.data;
   });
 }
 
 function addBus() {
-  request({
-    url: "/bus/add",
-    method: "post",
-    data: bus.value
-  }).then(res => {
+  busLineApi.add(bus.value).then(res => {
     getBusData();
   });
 }
 
 function updateBus() {
-  request({
-    url: "/bus/update",
-    method: "post",
-    data: bus.value
-  }).then(res => {
+  busLineApi.update(bus.value).then(res => {
     getBusData();
   });
 }
 
 function deleteBus(id) {
-  request({
-    url: "/bus/delete",
-    method: "delete",
-    params: {
-      id
-    }
-  }).then(res => {
+  busLineApi.delete(id).then(res => {
     getBusData();
   });
 }

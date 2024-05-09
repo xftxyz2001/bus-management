@@ -19,12 +19,11 @@
 
 <script setup>
 import DateUtils from "@/components/DateUtils.vue";
-import request from "@/utils/request";
+import userApi from "@/api/userApi";
 import { ref } from "vue";
 
 const role = ref("");
-
-request.get("/user/role").then(res => {
+userApi.getRole().then(res => {
   role.value = res.data;
 });
 </script>

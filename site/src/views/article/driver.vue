@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request.js";
+import driverApi from "@/api/driverApi";
 import { ref } from "vue";
 
 const searchQuery = ref("");
@@ -73,27 +73,17 @@ const drivers = ref([]);
 
 // 获取司机数据
 function fetchDrivers() {
-  request
-    .get("/driver/getAllDrivers")
-    .then(res => {
-      drivers.value = res.data;
-    })
-    .catch(err => {
-      console.error("Failed to fetch drivers:", err);
-    });
+  driverApi.getAllDrivers().then(res => {
+    drivers.value = res.data;
+  });
 }
 fetchDrivers();
 
 // 搜索司机
 function searchDrivers() {
-  request
-    .get(`/driver/getByDriverName?driverName=${searchQuery.value}`)
-    .then(res => {
-      drivers.value = res.data;
-    })
-    .catch(err => {
-      console.error("Failed to search drivers:", err);
-    });
+  driverApi.getByDriverName(searchQuery.value).then(res => {
+    drivers.value = res.data;
+  });
 }
 
 // 重置搜索
@@ -104,38 +94,23 @@ function resetSearch() {
 
 // 删除司机
 function handleDelete(driver) {
-  request
-    .delete(`/driver/${driver.driverid}`)
-    .then(() => {
-      fetchDrivers();
-    })
-    .catch(err => {
-      console.error("Failed to delete driver:", err);
-    });
+  driverApi.deleteDriver(driver.driverid).then(() => {
+    fetchDrivers();
+  });
 }
 
 // 添加司机
 function addDriver() {
-  request
-    .post("/driver/addDriver", newDriver.value)
-    .then(() => {
-      fetchDrivers();
-    })
-    .catch(err => {
-      console.error("Failed to add driver:", err);
-    });
+  driverApi.addDriver(newDriver.value).then(() => {
+    fetchDrivers();
+  });
 }
 
 // 更新司机
 function updateDriver() {
-  request
-    .put("/driver/update", newDriver.value)
-    .then(() => {
-      fetchDrivers();
-    })
-    .catch(err => {
-      console.error("Failed to update driver:", err);
-    });
+  driverApi.updateDriver(newDriver.value).then(() => {
+    fetchDrivers();
+  });
 }
 
 const dialogVisible = ref(false);

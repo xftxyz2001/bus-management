@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import request from "@/utils/request.js";
+import boardApi from "@/api/boardApi";
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
 
@@ -92,17 +92,10 @@ const searchKeyword = ref("");
 
 // 从后端获取公告信息
 function fetchNotice() {
-  request({
-    url: "/board/getAllboard",
-    method: "get"
-  })
-    .then(res => {
-      currentNotice.value = res.data;
-      filteredNotice.value = res.data;
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  boardApi.getAllBoard().then(res => {
+    currentNotice.value = res.data;
+    filteredNotice.value = res.data;
+  });
 }
 
 //模糊搜索
@@ -116,9 +109,7 @@ function searchNotice() {
 // 增加公告
 
 function openAddDialog() {
-  console.log("打开新增公告对话框");
   addDialogVisible.value = true;
-  console.log(addDialogVisible.value);
 }
 
 // 清空新增公告表单
@@ -127,38 +118,21 @@ function clearAddForm() {
 }
 
 function addNotice() {
-  request({
-    url: "/board/declare",
-    method: "post",
-    data: {
-      title: newNoticeForm.value.title,
-      content: newNoticeForm.value.content
-    }
-  })
-    .then(res => {
-      console.log(res);
-      if (res.data) {
-        fetchNotice();
-        clearAddForm();
-        addDialogVisible.value = false;
-        ElMessage.success("添加成功");
-        console.log("公告添加成功");
-      } else {
-        console.error("Failed to add board:", res.data.error);
-        console.log("公告添加失败");
-      }
-    })
-    .catch(err => {
-      console.error("Error adding board:", err);
-      console.log("公告添加失败");
-    });
+  boardApi.declare(newNoticeForm.value).then(res => {
+    fetchNotice();
+    clearAddForm();
+    addDialogVisible.value = false;
+    ElMessage.success("添加成功");
+    console.log("公告添加成功");
+  });
 }
 
 //删除公告
 function deleteNotice(row) {
-  request.delete("/board/delete/" + id).then(res => {
-    ElMessage.success("删除成功");
+  boardApi.delete(row.id).then(res => {
     fetchNotice();
+    ElMessage.success("删除成功");
+    console.log("公告删除成功");
   });
 }
 
@@ -176,30 +150,12 @@ function cancelEdit() {
 }
 
 function updateNotice() {
-  request({
-    url: "/board/revise",
-    method: "post",
-    data: {
-      id: editedNotice.value.id,
-      title: editedNotice.value.title,
-      content: editedNotice.value.content
-    }
-  })
-    .then(res => {
-      if (res.data) {
-        fetchNotice();
-        editDialogVisible.value = false;
-        ElMessage.success("修改成功");
-        console.log("公告修改成功");
-      } else {
-        console.error("Failed to update board:", res.data.error);
-        console.log("公告修改失败");
-      }
-    })
-    .catch(err => {
-      console.error("Error updating board:", err);
-      console.log("公告修改失败");
-    });
+  boardApi.revise(editedNotice.value).then(res => {
+    fetchNotice();
+    editDialogVisible.value = false;
+    ElMessage.success("修改成功");
+    console.log("公告修改成功");
+  });
 }
 
 // 页面加载时获取公告信息
