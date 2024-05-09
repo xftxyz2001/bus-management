@@ -1,38 +1,14 @@
 package com.bus.management.service;
 
-import com.bus.management.pojo.User;
+import com.bus.management.domain.User;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
+/**
+* @author 25810
+* @description 针对表【user(用户表)】的数据库操作Service
+* @createDate 2024-05-09 11:07:10
+*/
+public interface UserService extends IService<User> {
 
-public interface UserService {
-    User findByID(Integer id);
-
-    //根据用户名查询用户
-    User findByUserName(String username);
-
-    User findByEmail(String email);
-
-    //注册
-    void register(String username, String password, int age, int gender, String phone);
-
-    //更新
-    void update(User user);
-
-    void updatePwd(String newPwd);
-
-    //查询所有用户信息
-    List<User> getAll();
-
-    // 刪除用戶
-    void deleteUser(Integer id);
-
-    //添加信息
-    void add(User a);
-
-    User getCurrentUser();
-
-
-    void sendResetPassword(String email);
-
-    void updateToken(String username, String token);
+    void frogetPassword(String email);
 }

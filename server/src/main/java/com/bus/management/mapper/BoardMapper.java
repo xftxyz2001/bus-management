@@ -1,24 +1,18 @@
 package com.bus.management.mapper;
 
-import com.bus.management.pojo.Board;
-import org.apache.ibatis.annotations.*;
+import com.bus.management.domain.Board;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.List;
+/**
+* @author 25810
+* @description 针对表【board】的数据库操作Mapper
+* @createDate 2024-05-09 11:07:10
+* @Entity com.bus.management.domain.Board
+*/
+public interface BoardMapper extends BaseMapper<Board> {
 
-@Mapper
-public interface BoardMapper {
-    @Select("select * from board")
-    List<Board> getAll();
-
-    @Insert("insert into board  (title,content) values(#{title},#{content})")
-    void add(String title, String content);
-
-    @Delete("delete from board where id = #{id}")
-    void deleteBoard(Integer id);
-
-    @Update("update board set title=#{title},content=#{content} where id = #{id}")
-    void revise(Integer id, String title, String content);
-
-    @Select("SELECT * FROM board WHERE title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') OR updateTime LIKE CONCAT('%', #{keyword}, '%') OR createTime LIKE CONCAT('%', #{keyword}, '%')")
-    List<Board> searchNotices(String keyword);
 }
+
+
+
+

@@ -1,9 +1,5 @@
 package com.bus.management.utils;
 
-/**
- * ThreadLocal 工具类
- */
-@SuppressWarnings("all")
 public class ThreadLocalUtil {
 
     //提供ThreadLocal对象,

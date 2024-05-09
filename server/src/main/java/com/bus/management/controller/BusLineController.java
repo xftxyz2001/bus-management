@@ -1,60 +1,60 @@
 package com.bus.management.controller;
 
-import com.bus.management.pojo.BusLine;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.bus.management.domain.Busline;
 import com.bus.management.result.Result;
-import com.bus.management.service.BusLineService;
+import com.bus.management.service.BuslineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/bus")
 @Validated
 public class BusLineController {
     @Autowired
-    private BusLineService busLineService;
+    private BuslineService buslineService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody BusLine bus) {
+    public Result<?> add(@RequestBody Busline bus) {
         if (bus == null) {
             return Result.error("参数错误");
         }
         if (bus.getBusid() == null) {
             return Result.error("请输入公交线路");
         }
-
-        BusLine b = busLineService.findBybusid(bus.getBusid());
-        if (b == null) {
-            busLineService.registerbus(bus);
-            return Result.success();
-        } else {
+        Busline busline = buslineService.getOne(Wrappers.<Busline>lambdaQuery().eq(Busline::getBusid, bus.getBusid()));
+        if (busline != null) {
             return Result.error("该公交车已存在");
         }
+        buslineService.save(bus);
+        return Result.success();
     }
 
     @GetMapping("/getAll")
-    public Result getAll() {
-        List<BusLine> all = busLineService.getAll();
+    public Result<?> getAll() {
+        List<Busline> all = buslineService.list();
         return Result.success(all);
     }
 
     @GetMapping("/getByBusid")
-    public Result getByBusid(String busid) {
-        BusLine bus = busLineService.findBybusid(busid);
+    public Result<?> getByBusid(String busid) {
+        Busline bus = buslineService.getOne(Wrappers.<Busline>lambdaQuery().eq(Busline::getBusid, busid));
         return Result.success(bus);
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody BusLine bus) {
-        busLineService.update(bus);
+    public Result<?> update(@RequestBody Busline bus) {
+        buslineService.updateById(bus);
         return Result.success();
     }
 
     @DeleteMapping("/delete")
-    public Result delete(String id) {
-        busLineService.delete(id);
+    public Result<?> delete(String id) {
+        buslineService.removeById(id);
         return Result.success();
     }
 

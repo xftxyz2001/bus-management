@@ -1,20 +1,13 @@
 package com.bus.management.service;
 
+import com.bus.management.domain.Driver;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-import com.bus.management.pojo.Driver;
+/**
+* @author 25810
+* @description 针对表【driver】的数据库操作Service
+* @createDate 2024-05-09 11:07:10
+*/
+public interface DriverService extends IService<Driver> {
 
-import java.util.List;
-
-public interface DriverService {
-    List<Driver> getAllDrivers();
-
-    void addDriver(Driver driver);
-
-    Driver getDriverById(int id);
-
-    void updateDriver(Driver driver);
-
-    void deleteDriver(int id);
-
-    List<Driver> getByDriverName(String driverName);
 }

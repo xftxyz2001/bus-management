@@ -1,7 +1,8 @@
 package com.bus.management.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bus.management.config.Env;
-import com.bus.management.pojo.User;
+import com.bus.management.domain.User;
 import com.bus.management.result.Result;
 import com.bus.management.service.EmailService;
 import com.bus.management.service.UserService;
@@ -23,9 +24,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/user")
 @Validated
-@SuppressWarnings("all")
 public class UserController {
-
 
     @Autowired
     private UserService userService;
@@ -36,10 +35,10 @@ public class UserController {
     private EmailService emailService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody User a) {
-        User u = userService.findByUserName(a.getUsername());
+    public Result<?> add(@RequestBody User user) {
+        User u = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
         if (u == null) {
-            userService.add(a);
+            userService.save(user);
             return Result.success();
         } else {
             return Result.error("该用户名已被占用");
@@ -48,93 +47,89 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public Result register(@Pattern(regexp = "^\\S{3,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password, @RequestParam int age, @RequestParam int gender, @RequestParam String phone) {
+    public Result<?> register(@Pattern(regexp = "^\\S{3,16}$") String username,
+                              @Pattern(regexp = "^\\S{5,16}$") String password,
+                              @RequestParam int age, @RequestParam int gender,
+                              @RequestParam String phone) {
 
-        User u = userService.findByUserName(username);
+        User u = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
 
-        if (u == null) {
-            //没有占用
-            //注册
-            userService.register(username, password, age, gender, phone);
-            return Result.success();
-
-        } else {
-            //占用
+        if (u != null) {
             return Result.error("用户名已经被占用");
         }
-
-
+        u = new User();
+        u.setUsername(username);
+        u.setPassword(Md5Util.getMD5String(password));
+        u.setAge(age);
+        u.setGender(gender);
+        u.setPhone(phone);
+        u.setIdentify(User.ROLE_USER);
+        userService.save(u);
+        return Result.success();
     }
 
     @PostMapping("/login")
     public Result<?> login(@Pattern(regexp = "^\\S{3,16}$") String username, @Pattern(regexp = "^\\S{5,16}$") String password) {
         //根据用户名查询用户
-        User loginUser = userService.findByUserName(username);
+        User loginUser = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
         //判断该用户是否存在
         if (loginUser == null) {
             return Result.error("用户名错误");
         }
 
         //判断密码是否正确  loginUser对象中的password是密文
-        if (Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
-            //登录成功
-            // Map<String, Object> claims = new HashMap<>();
-            // claims.put("id", loginUser.getId());
-            // claims.put("username", loginUser.getUsername());
-            String token = JwtUtil.generateToken(loginUser.getId());
-            //把token存储到redis中
-            ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-            operations.set(token, token, JwtUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
-            userService.updateToken(username, token);
-            return Result.success(token);
-            //return Result.success("密码正确");
+        if (!Md5Util.getMD5String(password).equals(loginUser.getPassword())) {
+            return Result.error("密码错误");
         }
-        return Result.error("密码错误");
+        //登录成功
+        String token = JwtUtil.generateToken(loginUser.getId());
+        //把token存储到redis中
+        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
+        operations.set(token, token, JwtUtil.EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        // userService.updateToken(username, token);
+        userService.update(Wrappers.<User>lambdaUpdate().eq(User::getUsername, username).set(User::getToken, token));
+        return Result.success(token);
     }
 
     @GetMapping("/userInfo")
-    public Result<User> userInfo(@RequestHeader(name = "Authorization", required = false) String token) {
-        Map<String, Object> map = ThreadLocalUtil.get();
-        String username = (String) map.get("username");
-        //  Map<String,Object>map = JwtUtil.parseToken(token);
-//        String username = (String)map.get("username");
-        User user = userService.findByUserName(username);
+    public Result<?> userInfo(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
+        User user = userService.getById(userId);
         return Result.success(user);
     }
 
 
     //获取所有用户信息
     @GetMapping("/getAll")
-    public Result getAll() {
-        List<User> all = userService.getAll();
+    public Result<?> getAll() {
+        List<User> all = userService.list();
         return Result.success(all);
     }
 
     //获取当前登录用户信息
     @GetMapping("/current")
-    public Result<User> getCurrent(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
-        User user = userService.findByID(userId);
+    public Result<?> getCurrent(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
+        User user = userService.getById(userId);
         user.setPassword(null);
         return Result.success(user);
     }
 
 
     @PutMapping("/update")
-    public Result update(@RequestBody User user) {
-        userService.update(user);
+    public Result<?> update(@RequestBody User user) {
+        userService.updateById(user);
         return Result.success();
     }
 
 
     @DeleteMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Integer id) {
-        userService.deleteUser(id);
+    public Result<?> delete(@PathVariable("id") Integer id) {
+        userService.removeById(id);
         return Result.success();
     }
 
 
     @PatchMapping("/updatePwd")
-    public Result updatePwd(@RequestBody Map<String, String> params, @RequestHeader("Authorization") String token) {
+    public Result<?> updatePwd(@RequestBody Map<String, String> params, @RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
         //1、检验参数
         String oldPwd = params.get("old_pwd");
         String newPwd = params.get("new_pwd");
@@ -145,10 +140,7 @@ public class UserController {
         }
 
         //原密码是否正确
-        //调用userService根据用户名拿到原密码,再和old_pwd比对
-        Map<String, Object> map = ThreadLocalUtil.get();
-        String username = (String) map.get("username");
-        User loginUser = userService.findByUserName(username);
+        User loginUser = userService.getById(userId);
         if (!loginUser.getPassword().equals(Md5Util.getMD5String(oldPwd))) {
             return Result.error("原密码填写不正确");
         }
@@ -159,27 +151,24 @@ public class UserController {
         }
 
         //2.调用service完成密码更新
-        userService.updatePwd(newPwd);
+        loginUser.setPassword(Md5Util.getMD5String(newPwd));
+        userService.updateById(loginUser);
         //删除redis中对应的token
-        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-        operations.getOperations().delete(token);
-//        ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-//        operations.getOperations().delete(token);
+        stringRedisTemplate.opsForValue().getOperations().delete(loginUser.getToken());
         return Result.success();
 
     }
 
     @PostMapping("/forget")
-    public Result frogetPassword(@RequestParam String email) {
-        System.out.println(email);
-        userService.sendResetPassword(email);
+    public Result<?> frogetPassword(@RequestParam String email) {
+        userService.frogetPassword(email);
         return Result.success("重置密码邮件已发送至您的邮箱。");
     }
 
     // 获取用户角色
     @GetMapping("/role")
-    public Result<String> getRole(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
-        User user = userService.findByID(userId);
+    public Result<?> getRole(@RequestAttribute(Env.CURRENT_REQUEST_USER) Integer userId) {
+        User user = userService.getById(userId);
         if (User.ROLE_USER.equals(user.getIdentify())) {
             return Result.success("用户");
         } else if (User.ROLE_ADMIN.equals(user.getIdentify())) {

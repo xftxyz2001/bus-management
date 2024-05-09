@@ -1,39 +1,18 @@
 package com.bus.management.mapper;
 
-import com.bus.management.pojo.User;
-import org.apache.ibatis.annotations.*;
+import com.bus.management.domain.User;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.List;
+/**
+* @author 25810
+* @description 针对表【user(用户表)】的数据库操作Mapper
+* @createDate 2024-05-09 11:07:10
+* @Entity com.bus.management.domain.User
+*/
+public interface UserMapper extends BaseMapper<User> {
 
-@Mapper
-public interface UserMapper {
-    @Select("select *from user where id = #{id}")
-    public User findByID(Integer id);
-
-    @Select("select * from user where username = #{username}")
-    User findByUserName(String username);
-
-    @Insert("insert into user(username,password,age,gender,phone,identify) values (#{username},#{password},#{age},#{gender},#{phone},0)")
-    void add(String username, String password, int age, int gender, String phone);
-
-    @Update("update user set age = #{age},gender=#{gender},phone=#{phone}, username=#{username} where id = #{id}")
-    void update(User user);
-
-    @Update("update user set password = #{newPwd} where id = #{id} ")
-    void updatePwd(String newPwd, Integer id);
-
-    @Select("select  * from user")
-    List<User> getAll();
-
-    @Delete("delete from user where id = #{id}")
-    void deleteUser(Integer id);
-
-    @Insert("insert into user(username,age,gender,password,phone) values (#{username},#{age},#{gender},#{password},#{phone})")
-    void zengjia(String username, short age, short gender, String password, String phone);
-
-    @Select("select * from user where email= #{email}")
-    User findByEmail(String email);
-
-    @Update("update user set token = #{token} where username = #{username}")
-    void updateToken(String username, String token);
 }
+
+
+
+
