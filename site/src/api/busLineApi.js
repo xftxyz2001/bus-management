@@ -18,5 +18,8 @@ export default {
   },
   search(data) {
     return request.post("/bus/search", data);
+  },
+  getStation(keyword) {
+    return request.get("/bus/getStation", { params: { keyword } });
   }
 };

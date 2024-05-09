@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -61,6 +62,16 @@ public class BusLineController {
     public Result<?> search(@RequestBody BusSearchReq req) {
         List<Busline> list = buslineService.search(req);
         return Result.success(list);
+    }
+
+    @GetMapping("/getStation")
+    public Result<?> getStation(@RequestParam("keyword") String keyword) {
+        List<Busline> list = buslineService.list(Wrappers.<Busline>lambdaQuery().like(Busline::getRoutesite, keyword));
+        List<String> res = list.stream().map(Busline::getRoutesite).flatMap(s -> {
+            String[] split = s.split("-");
+            return Stream.of(split);
+        }).distinct().filter(s -> s.contains(keyword)).toList();
+        return Result.success(res);
     }
 
 
