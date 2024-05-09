@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-//导入组件
 import LoginVue from "@/views/login.vue";
 import LayoutVue from "@/views/layout.vue";
 import ArticleCategoryVue from "@/views/article/ArticleCategory.vue";
@@ -12,6 +11,7 @@ import messageBoard from "@/views/article/messageBoard.vue";
 import driverManage from "@/views/article/driverManage.vue";
 import busSearch from "@/views/article/busSearch.vue";
 import forgetPassword from "@/views/article/forgetPassword.vue";
+
 const routes = [
   { path: "/", redirect: "/login" },
   { path: "/login", component: LoginVue },
@@ -33,11 +33,9 @@ const routes = [
   }
 ];
 
-//创建路由器
 const router = createRouter({
   history: createWebHistory(),
   routes: routes
 });
 
-//导出路由
 export default router;
