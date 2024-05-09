@@ -2,6 +2,9 @@ package com.bus.management.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bus.management.domain.Busline;
+import com.bus.management.vo.req.BusSearchReq;
+
+import java.util.List;
 
 /**
  * @author 25810
@@ -10,4 +13,5 @@ import com.bus.management.domain.Busline;
  */
 public interface BuslineService extends IService<Busline> {
 
+    List<Busline> search(BusSearchReq req);
 }

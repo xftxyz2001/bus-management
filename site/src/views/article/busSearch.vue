@@ -16,7 +16,10 @@
     <div>
       <h2 style="color: #fff">查询结果：</h2>
       <ul>
-        <li></li>
+        <li v-for="bus in buses" :key="bus.id">
+          <span style="color: aqua">{{ bus.id }}</span>
+          <span style="color: aqua">{{ bus.routesite }}</span>
+        </li>
       </ul>
     </div>
   </div>
@@ -32,6 +35,8 @@ const query = ref({
   end: ""
 });
 
+const buses = ref([]);
+
 function searchBuses() {
   if (!query.value.start) {
     ElMessage.warning("请输入起始站点");
@@ -46,7 +51,7 @@ function searchBuses() {
     return;
   }
   request.post("/bus/search", query.value).then(res => {
-    console.log(res.data);
+    buses.value = res.data;
   });
 }
 </script>

@@ -1,10 +1,14 @@
 package com.bus.management.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bus.management.domain.Busline;
 import com.bus.management.mapper.BuslineMapper;
 import com.bus.management.service.BuslineService;
+import com.bus.management.vo.req.BusSearchReq;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author 25810
@@ -15,6 +19,11 @@ import org.springframework.stereotype.Service;
 public class BuslineServiceImpl extends ServiceImpl<BuslineMapper, Busline>
         implements BuslineService {
 
+    @Override
+    public List<Busline> search(BusSearchReq req) {
+        String routePattern = "%" + req.getStart() + "-%" + req.getEnd() + "%";
+        return baseMapper.selectList(Wrappers.<Busline>lambdaQuery().like(Busline::getRoutesite, routePattern));
+    }
 }
 
 

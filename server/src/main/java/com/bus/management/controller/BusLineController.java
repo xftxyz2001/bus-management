@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.bus.management.domain.Busline;
 import com.bus.management.result.Result;
 import com.bus.management.service.BuslineService;
+import com.bus.management.vo.req.BusSearchReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +58,12 @@ public class BusLineController {
         buslineService.removeById(id);
         return Result.success();
     }
+
+    @PostMapping("/search")
+    public Result<?> search(@RequestBody BusSearchReq req) {
+        List<Busline> list = buslineService.search(req);
+        return Result.success(list);
+    }
+
 
 }
