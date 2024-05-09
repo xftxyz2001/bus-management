@@ -76,7 +76,6 @@
 </template>
 
 <script setup>
-import request from "@/utils/request";
 import { Delete, Edit } from "@element-plus/icons-vue";
 import { ref } from "vue";
 
@@ -101,7 +100,7 @@ function getData() {
 getData();
 
 function handleDelete(row) {
-  userApi.deleteUser(row.id).then(res => {
+  userApi.delete(row.id).then(res => {
     ElMessage.success("删除成功");
     getData();
   });
@@ -127,21 +126,13 @@ const editUser = ref({
 });
 
 function addUser() {
-  request({
-    url: "/user/add",
-    method: "post",
-    data: editUser.value
-  }).then(res => {
+  userApi.add(editUser.value).then(res => {
     getData();
   });
 }
 
 function updateUser() {
-  request({
-    url: "/user/update",
-    method: "put",
-    data: editUser.value
-  }).then(res => {
+  userApi.update(editUser.value).then(res => {
     getData();
   });
 }

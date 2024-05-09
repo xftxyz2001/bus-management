@@ -41,13 +41,12 @@
         退出登录
       </el-button>
     </el-card>
-
   </div>
 </template>
 
 <script setup>
-import request from "@/utils/request";
 import { ElMessage, ElMessageBox } from "element-plus";
+import userApi from "@/api/userApi";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -62,9 +61,8 @@ const phone = ref("");
 const age = ref("");
 
 function fetchProfile() {
-  console.log(12312312312312312);
-  request
-    .get("/user/current")
+  userApi
+    .getCurrent()
     .then(res => {
       const data = res.data;
       id.value = data.id;
